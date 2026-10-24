@@ -1,576 +1,910 @@
 <title>Nettby Nostalgi</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
-/* Layout: 2006-era portal: header band, tab row, three columns (sidebar / innhold / sidebar) that stack on phones */
+/* Layout: Nettby anno 2009: hvit topp med skyline, svart hovedmeny, grønn fanerad, innholdskolonner + grønn brukermeny til høyre */
 :root {
-  --page: #dfe9f3;        /* himmelblå bakgrunn */
-  --panel: #ffffff;
-  --panel-alt: #f2f7fc;
-  --line: #9db7d1;
-  --navy: #1d3f6e;        /* toppbanner, overskrifter */
-  --navy-2: #2f5d95;
-  --orange: #f08a1c;      /* knapper, uleste ting */
-  --orange-dark: #c96b06;
-  --ink: #1b2430;
-  --muted: #5d6f84;
-  --link: #1650a8;
-  --ok: #2f8a3a;
-  --font-ui: Verdana, Tahoma, "DejaVu Sans", Geneva, sans-serif;
-  --font-head: "Trebuchet MS", "Lucida Grande", Tahoma, sans-serif;
-  --fs: 12px;
+  --bg: #ffffff;
+  --ink: #1c1c1c;
+  --muted: #666a60;
+  --green: #8dc63f;        /* fanerad, rammer */
+  --green-dark: #5c8a1e;
+  --green-ink: #4f7d12;    /* brukernavn */
+  --green-soft: #eaf5d9;   /* brukermeny */
+  --green-line: #a8d26a;
+  --nav-top: #4b4b4b;
+  --nav-bot: #0e0e0e;
+  --nav-hi: #ffa21a;       /* aktiv menyknapp */
+  --box-head: #2b2b2b;
+  --line: #cfcfcf;
+  --soft: #f3f3f3;
+  --pink: #d6307a;
+  --blue: #2e6fd1;
+  --gold: #e7a400;
+  --font: Verdana, Tahoma, "DejaVu Sans", Geneva, sans-serif;
+  --font-head: Arial, "Helvetica Neue", Helvetica, "Liberation Sans", sans-serif;
   color-scheme: light;
 }
 * { box-sizing: border-box; }
-body {
-  background: var(--page);
-  color: var(--ink);
-  font: var(--fs)/1.45 var(--font-ui);
+body { background: var(--bg); color: var(--ink); font: 12px/1.45 var(--font); }
+a, .lnk { color: var(--ink); text-decoration: underline; cursor: pointer; background: none; border: 0; padding: 0; font: inherit; text-align: left; }
+a:hover, .lnk:hover { color: var(--green-dark); }
+.u { color: var(--green-ink); font-weight: bold; }
+:focus-visible { outline: 2px solid var(--nav-hi); outline-offset: 1px; }
+h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; text-wrap: balance; }
+
+.shell { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 8px 24px; }
+
+/* reklamebanner (oppdiktet) */
+.ads { display: grid; grid-template-columns: minmax(0, 1fr) 160px; gap: 8px; margin-bottom: 6px; }
+.ad { background: #111; color: #fff; border: 1px solid #000; min-height: 90px; display: flex; align-items: center; gap: 14px; padding: 8px 14px; overflow: hidden; }
+.ad .burst { flex: none; width: 80px; height: 80px; padding: 4px; border-radius: 50%; background: #1d7fc9; border: 3px solid #fff; display: grid; place-items: center; text-align: center; font: bold 11px/1.05 var(--font-head); }
+.ad .burst b { font-size: 22px; display: block; }
+.ad .big { font: 900 clamp(18px, 4vw, 34px)/1 var(--font-head); color: #3c4a5c; text-transform: uppercase; letter-spacing: -1px; }
+.ad .big span { color: #cfd9e6; }
+.ad .clock { margin-left: auto; display: flex; gap: 6px; font: bold 18px monospace; color: #7dff6a; background: #000; padding: 4px 8px; border: 1px solid #333; }
+.ad.side { flex-direction: column; justify-content: center; text-align: center; background: linear-gradient(#2a0d3a, #7a1452); gap: 6px; font: bold 13px var(--font-head); }
+.ad.side small { font: 10px var(--font); color: #f4c6e0; }
+@media (max-width: 640px) { .ads { grid-template-columns: minmax(0, 1fr); } .ad.side { display: none; } .ad .clock { display: none; } }
+
+/* topp */
+.head { position: relative; display: flex; align-items: flex-end; gap: 10px; min-height: 104px; background: linear-gradient(#bfe3f7 0%, #e9f6fd 55%, #fff 100%); border: 1px solid #d5dde2; border-bottom: 0; overflow: hidden; }
+.head svg.sky { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 60px; }
+.logo { position: relative; display: flex; align-items: flex-end; gap: 8px; padding: 0 10px 8px; flex: none; cursor: pointer; background: none; border: 0; }
+.logo .word { font: bold 34px/1 var(--font-head); color: #3a3a3a; letter-spacing: -1px; }
+.logo .word span { color: var(--green-dark); }
+.logo .word small { display: block; font: bold 10px var(--font); color: var(--green-dark); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+.featured { position: relative; display: flex; gap: 6px; margin-left: auto; padding: 0 6px 6px; overflow: hidden; }
+.fcard { background: #fff; border: 1px solid #c9c9c9; border-radius: 6px 6px 0 0; display: flex; gap: 6px; padding: 5px; width: 135px; flex: none; }
+.fcard .ph { width: 50px; height: 56px; flex: none; }
+.fcard .meta { font-size: 11px; min-width: 0; overflow: hidden; }
+.online-badge { position: absolute; top: 0; right: 0; background: #111; color: #fff; font: bold 12px var(--font); padding: 2px 7px; z-index: 1; }
+@media (max-width: 760px) { .fcard:nth-child(n+3) { display: none; } }
+@media (max-width: 520px) { .featured { display: none; } }
+
+.nav { display: flex; flex-wrap: wrap; background: linear-gradient(var(--nav-top), var(--nav-bot)); border: 1px solid #000; }
+.nav button { flex: 1 1 auto; font: bold 13px var(--font-head); color: #fff; background: none; border: 0; border-right: 1px solid #555; border-left: 1px solid #222; padding: 6px 10px; cursor: pointer; white-space: nowrap; }
+.nav button:hover { background: rgba(255,255,255,.12); }
+.nav button.on { color: var(--nav-hi); }
+.nav .max { color: var(--green); }
+
+.sub { display: flex; flex-wrap: wrap; gap: 3px; background: var(--green); border: 1px solid var(--green-dark); border-top: 0; padding: 4px 4px 0; }
+.sub button { font: 12px var(--font); background: #f4fae9; color: var(--ink); border: 1px solid var(--green-dark); border-bottom: 0; padding: 3px 8px; cursor: pointer; display: inline-flex; gap: 4px; align-items: center; }
+.sub button:hover { background: #fff; }
+.sub button.on { background: #fff; font-weight: bold; }
+
+.page { display: grid; grid-template-columns: minmax(0, 1fr) 140px; gap: 8px; padding-top: 8px; }
+.page > * { min-width: 0; }
+.cols { display: grid; gap: 8px; align-items: start; }
+.cols > * { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.cols.front { grid-template-columns: 190px minmax(0, 1fr) 190px; }
+.cols.two { grid-template-columns: minmax(0, 1fr) 200px; }
+.cols.one { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 860px) {
+  .page { grid-template-columns: minmax(0, 1fr); }
+  .cols.front, .cols.two { grid-template-columns: minmax(0, 1fr); }
+  .cols.front > :first-child { order: 3; }
 }
-a, .lnk { color: var(--link); text-decoration: none; cursor: pointer; background: none; border: 0; padding: 0; font: inherit; }
-a:hover, .lnk:hover { text-decoration: underline; }
-button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--orange); outline-offset: 1px; }
-h1, h2, h3 { font-family: var(--font-head); margin: 0; text-wrap: balance; }
+#side { display: flex; flex-direction: column; gap: 8px; }
+@media (max-width: 860px) { #side { order: 2; } }
 
-.shell { max-width: 1000px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px 24px; }
+.box { border: 1px solid var(--line); }
+.box > .bh { background: var(--box-head); color: #fff; font: bold 13px var(--font-head); padding: 4px 7px; display: flex; justify-content: space-between; gap: 6px; align-items: center; }
+.box > .bb { padding: 7px; display: flex; flex-direction: column; gap: 6px; }
+.box.g { border-color: var(--green-line); }
+.box.g > .bh { background: var(--green); color: #fff; text-shadow: 0 1px 0 var(--green-dark); }
+.box.g > .bb { background: var(--green-soft); }
+.box.plain { border: 0; }
+.box.plain > .bh { background: none; color: var(--ink); padding: 0 0 3px; border-bottom: 3px solid #111; font-size: 17px; }
+.box.plain > .bb { padding: 6px 0; }
 
-/* toppbanner */
-.top { background: linear-gradient(#2f5d95, #1d3f6e); border: 1px solid var(--navy); border-bottom: 0; color: #fff; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; padding: 12px 14px; }
-.logo { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-.logo h1 { font-size: 30px; letter-spacing: -1px; font-weight: bold; color: #fff; text-shadow: 2px 2px 0 #0d2442; }
-.logo h1 span { color: #ffb350; }
-.logo small { color: #c7d9ee; font-size: 11px; }
-.who { font-size: 11px; color: #dbe7f5; text-align: right; }
-.who b { color: #fff; }
-.who .lnk { color: #ffd08f; }
-
-.tabs { display: flex; flex-wrap: wrap; gap: 2px; background: var(--navy); border: 1px solid var(--navy); padding: 4px 4px 0; }
-.tabs button { font: bold 11px var(--font-ui); background: #c9daec; color: var(--navy); border: 1px solid #9db7d1; border-bottom: 0; padding: 5px 10px; cursor: pointer; }
-.tabs button:hover { background: #fff; }
-.tabs button.on { background: var(--panel); color: var(--ink); }
-.tabs .cnt { background: var(--orange); color: #fff; padding: 0 4px; margin-left: 3px; font-size: 10px; }
-
-.cols { display: grid; grid-template-columns: 190px minmax(0, 1fr) 190px; gap: 10px; background: var(--panel); border: 1px solid var(--line); border-top: 0; padding: 10px; }
-.cols > * { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
-@media (max-width: 820px) {
-  .cols { grid-template-columns: minmax(0, 1fr); }
-  #left { order: 2; } #main { order: 1; } #right { order: 3; }
-}
-
-.box { border: 1px solid var(--line); background: var(--panel); }
-.box > .bh { background: linear-gradient(#e9f1fa, #cfdff0); border-bottom: 1px solid var(--line); color: var(--navy); font: bold 11px var(--font-ui); text-transform: uppercase; letter-spacing: .5px; padding: 4px 7px; display: flex; justify-content: space-between; gap: 6px; }
-.box > .bb { padding: 8px; display: flex; flex-direction: column; gap: 6px; }
-.box.alt > .bb { background: var(--panel-alt); }
-
-.btn { font: bold 11px var(--font-ui); background: linear-gradient(#ffa846, var(--orange)); color: #fff; border: 1px solid var(--orange-dark); padding: 4px 10px; cursor: pointer; }
-.btn:hover { background: var(--orange-dark); }
-.btn.grey { background: linear-gradient(#fff, #dce6f0); color: var(--navy); border-color: var(--line); }
-.btn.grey:hover { background: #eef4fa; }
+.btn { font: bold 12px var(--font); background: linear-gradient(#fff, #dcdcdc); color: var(--ink); border: 1px solid #8a8a8a; padding: 3px 10px; cursor: pointer; }
+.btn:hover { background: #fff; }
+.btn.go { background: linear-gradient(#a9dc5c, #6fa52a); color: #fff; border-color: var(--green-dark); text-shadow: 0 1px 0 var(--green-dark); }
+.btn.go:hover { background: var(--green-dark); }
+.borger { display: inline-flex; align-items: center; gap: 8px; font: bold 18px var(--font-head); color: #4a2a00; background: linear-gradient(#ffd27a, #e98b17); border: 1px solid #9c5a00; border-radius: 8px; padding: 10px 18px; cursor: pointer; box-shadow: inset 0 1px 0 #fff3cf; align-self: center; }
 .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.stack { display: flex; flex-direction: column; gap: 6px; }
 
-input[type=text], input[type=password], input[type=number], textarea, select { font: 12px var(--font-ui); border: 1px solid #8fa8c2; padding: 3px 4px; background: #fff; color: var(--ink); width: 100%; }
+input[type=text], input[type=password], input[type=number], input[type=date], input[type=url], textarea, select { font: 12px var(--font); border: 1px solid #8f8f8f; padding: 3px 4px; background: #fff; color: var(--ink); width: 100%; }
 textarea { min-height: 70px; resize: vertical; }
-label { font-size: 11px; color: var(--muted); display: flex; flex-direction: column; gap: 2px; }
+label { font-size: 11px; display: flex; flex-direction: column; gap: 2px; }
 .form { display: flex; flex-direction: column; gap: 6px; }
 .err { color: #b3261e; font-size: 11px; }
-
 .muted { color: var(--muted); font-size: 11px; }
 .small { font-size: 11px; }
+.f { color: var(--pink); } .m { color: var(--blue); }
+.wrap { overflow-wrap: anywhere; }
+.num { font-variant-numeric: tabular-nums; }
 
-.av { width: 40px; height: 40px; flex: none; display: grid; place-items: center; color: #fff; font: bold 15px var(--font-head); border: 1px solid #555; text-shadow: 1px 1px 0 rgba(0,0,0,.4); }
-.av.big { width: 100px; height: 100px; font-size: 36px; border-width: 2px; }
-.av.tiny { width: 22px; height: 22px; font-size: 10px; }
+.flash { background: #fff7c7; border: 1px solid #e3c949; padding: 6px 8px; font-weight: bold; color: #5f4a00; }
 
-.ulist { display: flex; flex-direction: column; gap: 4px; }
-.uline { display: flex; gap: 6px; align-items: center; }
-.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); flex: none; }
+/* nyheter */
+.news { display: flex; flex-direction: column; gap: 5px; border-bottom: 3px solid #111; padding-bottom: 10px; }
+.news h2 { font: bold 22px/1.1 var(--font-head); text-transform: uppercase; }
+.news h2 .lnk { text-decoration: none; }
+.news .pic { height: 96px; border: 1px solid var(--line); display: grid; place-items: center; font: bold 26px var(--font-head); color: rgba(255,255,255,.85); text-shadow: 0 2px 0 rgba(0,0,0,.25); }
+.acts { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.acts .lnk, .acts span { display: inline-flex; align-items: center; gap: 4px; }
 
-.gb { display: flex; flex-direction: column; gap: 8px; }
-.gbe { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 8px; border-bottom: 1px dotted var(--line); padding-bottom: 8px; }
-.gbe:last-child { border-bottom: 0; }
-.gbe .t { overflow-wrap: anywhere; }
+.ulist { display: flex; flex-direction: column; gap: 2px; }
+.uline { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: #55b52a; display: inline-block; flex: none; }
+.grp { display: flex; gap: 4px; align-items: flex-start; }
+.grp svg { flex: none; margin-top: 2px; }
 
-.house { border: 2px solid var(--hc, var(--navy-2)); }
-.house > .bh { background: var(--hc, var(--navy-2)); color: #fff; border-color: var(--hc, var(--navy-2)); }
-.prof { display: grid; grid-template-columns: 100px minmax(0, 1fr); gap: 12px; }
-@media (max-width: 460px) { .prof { grid-template-columns: minmax(0, 1fr); } }
-.info { border-collapse: collapse; width: 100%; font-size: 11px; }
-.info td { padding: 2px 6px 2px 0; vertical-align: top; }
-.info td:first-child { color: var(--muted); width: 95px; }
-.status { background: #fff8d6; border: 1px solid #e8d48a; padding: 4px 6px; font-style: italic; overflow-wrap: anywhere; }
+.maxgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.maxgrid > * { aspect-ratio: 1; max-width: 100%; background: var(--green); padding: 2px; border: 0; cursor: pointer; }
+.maxgrid svg, .maxgrid img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.count { text-align: center; }
+.count b { font: bold 26px var(--font-head); display: block; letter-spacing: 1px; }
+
+/* brukermeny */
+.umenu { background: var(--green-soft); border: 1px solid var(--green-line); padding: 6px 8px; display: flex; flex-direction: column; gap: 10px; }
+.umenu .grpm { display: flex; flex-direction: column; gap: 2px; }
+.umenu .lnk { display: flex; gap: 5px; align-items: center; }
+.umenu .cnt { background: #d42; color: #fff; font: bold 10px var(--font); padding: 0 4px; border-radius: 6px; text-decoration: none; }
+.umenu .moods { display: flex; justify-content: space-around; background: #f9fcf3; border: 1px solid var(--green-line); padding: 6px; }
+
+/* profil */
+.prof { --pbg: #000; --pfg: #fff; background: var(--pbg); color: var(--pfg); border: 1px solid #000; padding: 10px; display: grid; grid-template-columns: 210px minmax(0, 1fr) 120px; gap: 12px; align-items: start; }
+.prof a, .prof .lnk { color: var(--pfg); }
+.prof .photo { width: 100%; max-width: 210px; aspect-ratio: 210 / 285; display: block; object-fit: cover; background: #333; }
+.prof .pname { display: flex; gap: 10px; align-items: center; }
+.prof h1 { font: bold 25px var(--font-head); }
+.prof .rank { display: flex; flex-direction: column; gap: 3px; font-size: 12px; }
+.bar { height: 7px; background: #fff; border: 1px solid #888; }
+.bar i { display: block; height: 100%; background: #55b52a; }
+.prof .gadget { background: linear-gradient(#3b4a55, #1b252c); border: 1px solid #556; border-radius: 6px; padding: 8px; display: flex; flex-direction: column; gap: 6px; align-items: center; color: #9dff7f; font: bold 11px monospace; }
+.prof .gadget .globe { width: 70px; height: 70px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #8fd0ff, #1b4f8a 60%, #071a33); border: 3px solid #889; }
+.prof .info td { padding: 1px 8px 1px 0; vertical-align: top; }
+.prof .about { overflow-wrap: anywhere; }
+.prof .gb { display: flex; flex-direction: column; gap: 8px; }
+.prof textarea, .prof input, .prof select { color: #1c1c1c; }
+@media (max-width: 760px) { .prof { grid-template-columns: 150px minmax(0, 1fr); } .prof .gadget { display: none; } }
+@media (max-width: 480px) { .prof { grid-template-columns: minmax(0, 1fr); } .prof .photo { max-width: 180px; } }
+
+.entry { display: grid; grid-template-columns: 60px minmax(0, 1fr); gap: 8px; border-bottom: 1px dotted currentColor; padding-bottom: 8px; }
+.entry:last-child { border-bottom: 0; }
+.entry .ph { width: 60px; height: 70px; }
+.entry .t { overflow-wrap: anywhere; }
+.pwide { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px; }
+.pwide h3 { font-size: 15px; border-bottom: 1px solid currentColor; padding-bottom: 2px; }
+
+.faces { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+.face { display: flex; flex-direction: column; gap: 2px; font-size: 11px; min-width: 0; }
+.face .ph { width: 100%; aspect-ratio: 5 / 6; max-width: 100%; border: 1px solid var(--line); }
+.photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+.photos figure { margin: 0; display: flex; flex-direction: column; gap: 3px; font-size: 11px; }
+.photos img { width: 100%; aspect-ratio: 1; object-fit: cover; border: 2px solid currentColor; }
+.ph svg, .ph img, .prof .photo svg, .prof .photo img { width: 100%; height: 100%; display: block; object-fit: cover; }
 
 table.list { border-collapse: collapse; width: 100%; font-size: 11px; }
-table.list th { text-align: left; background: #e3edf7; color: var(--navy); padding: 4px; border-bottom: 1px solid var(--line); }
+table.list th { text-align: left; background: var(--soft); padding: 4px; border-bottom: 1px solid var(--line); }
 table.list td { padding: 4px; border-bottom: 1px dotted var(--line); vertical-align: top; overflow-wrap: anywhere; }
 table.list tr.unread td { font-weight: bold; }
-.num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
-
+.prof table.list th { background: rgba(127,127,127,.25); border-color: currentColor; }
+.prof table.list td { border-color: rgba(127,127,127,.5); }
 .post { display: grid; grid-template-columns: 110px minmax(0, 1fr); border: 1px solid var(--line); }
-.post .pa { background: var(--panel-alt); border-right: 1px solid var(--line); padding: 6px; display: flex; flex-direction: column; gap: 4px; align-items: flex-start; font-size: 11px; }
+.post .pa { background: var(--soft); border-right: 1px solid var(--line); padding: 6px; display: flex; flex-direction: column; gap: 3px; font-size: 11px; }
+.post .pa .ph { width: 50px; height: 58px; }
 .post .pt { padding: 6px 8px; overflow-wrap: anywhere; white-space: pre-wrap; }
-@media (max-width: 460px) { .post { grid-template-columns: minmax(0, 1fr); } .post .pa { border-right: 0; border-bottom: 1px solid var(--line); flex-direction: row; align-items: center; } }
+@media (max-width: 480px) { .post { grid-template-columns: minmax(0, 1fr); } .post .pa { border-right: 0; border-bottom: 1px solid var(--line); flex-direction: row; align-items: center; flex-wrap: wrap; } }
 
-.flash { background: #fff3c4; border: 1px solid #e6c34a; padding: 6px 8px; font-weight: bold; color: #6b4d00; }
 .swatches { display: flex; flex-wrap: wrap; gap: 4px; }
-.swatches button { width: 24px; height: 24px; border: 2px solid #fff; outline: 1px solid #888; cursor: pointer; }
-.swatches button.on { outline: 2px solid var(--ink); }
-.grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
-.card { border: 1px solid var(--line); background: var(--panel-alt); padding: 8px; display: flex; flex-direction: column; gap: 4px; }
-.foot { text-align: center; font-size: 10px; color: var(--muted); padding-top: 10px; }
-.points { color: var(--orange-dark); font-weight: bold; }
-.blink { animation: blink 1s steps(2) infinite; }
-@keyframes blink { 50% { opacity: .2; } }
-@media (prefers-reduced-motion: reduce) { .blink { animation: none; } }
+.swatches button { width: 24px; height: 24px; border: 2px solid #fff; outline: 1px solid #777; cursor: pointer; }
+.swatches button.on { outline: 3px solid var(--nav-hi); }
+.meet { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 12px; align-items: start; }
+.meet .ph { width: 100%; max-width: 210px; aspect-ratio: 210 / 250; }
+@media (max-width: 480px) { .meet { grid-template-columns: minmax(0, 1fr); } }
+.maxbadge { background: #111; color: var(--green); font: bold 9px var(--font); padding: 0 3px; letter-spacing: .5px; }
+.foot { text-align: center; font-size: 10px; color: var(--muted); padding-top: 14px; }
 </style>
 
 <div class="shell">
-  <div class="top">
-    <div class="logo"><h1>nett<span>by</span></h1><small>nostalgi · uoffisiell fan-replika</small></div>
-    <div class="who" id="who"></div>
+  <div class="ads" aria-label="Reklame (oppdiktet)">
+    <div class="ad">
+      <div class="burst">VINN<b>10</b>MP3-<br>spillere</div>
+      <div class="big">Skriv i 10 <span>gjestebøker</span><br>og bli med i trekningen</div>
+      <div class="clock" id="clock" aria-hidden="true"></div>
+    </div>
+    <div class="ad side">Bli Max-borger!<small>Gull-merke, flere bilder og egen bakgrunn</small><button class="btn go" data-go="max">Les mer</button></div>
   </div>
-  <nav class="tabs" id="tabs"></nav>
-  <div class="cols">
-    <aside id="left"></aside>
-    <main id="main"></main>
-    <aside id="right"></aside>
+
+  <div class="head">
+    <svg class="sky" viewBox="0 0 980 60" preserveAspectRatio="none" aria-hidden="true">
+      <path fill="#d4d8db" d="M0 60V38h30V24h18v14h22V16h14v-6h10v6h14v22h26V28h20v10h18V20h28v18h16V8h8v30h30V30h22v8h40V18h12v-8h6v8h12v20h28V26h24v12h18V14h26v24h30V32h20v6h34V22h16v16h22V6h10v32h26V28h30v10h24V18h20v20h28V30h18v8h36V16h14v22h30V26h22v12h26V20h18v18h28V34h40v-12h20v38z"/>
+      <path fill="#fff" d="M0 60V52h980v8z"/>
+      <path stroke="#e6e6e6" stroke-width="2" d="M0 52h980M10 52v-8M30 52v-8M50 52v-8M70 52v-8M90 52v-8M110 52v-8M130 52v-8M150 52v-8M170 52v-8M190 52v-8M210 52v-8M230 52v-8"/>
+    </svg>
+    <button class="logo" data-go="nyheter" aria-label="Til forsiden">
+      <svg width="74" height="86" viewBox="0 0 74 86" aria-hidden="true">
+        <rect x="4" y="34" width="22" height="52" fill="#7c8a96"/><rect x="48" y="24" width="22" height="62" fill="#6a7884"/>
+        <rect x="22" y="14" width="30" height="72" fill="#8dc63f"/><path d="M22 14l15-12 15 12z" fill="#5c8a1e"/>
+        <g fill="#fff"><rect x="27" y="22" width="7" height="8"/><rect x="40" y="22" width="7" height="8"/><rect x="27" y="36" width="7" height="8"/><rect x="40" y="36" width="7" height="8"/><rect x="27" y="50" width="7" height="8"/><rect x="40" y="50" width="7" height="8"/><rect x="32" y="68" width="10" height="18"/></g>
+        <g fill="#c8d2da"><rect x="9" y="42" width="5" height="6"/><rect x="16" y="42" width="5" height="6"/><rect x="9" y="54" width="5" height="6"/><rect x="16" y="54" width="5" height="6"/><rect x="53" y="32" width="5" height="6"/><rect x="60" y="32" width="5" height="6"/><rect x="53" y="44" width="5" height="6"/><rect x="60" y="44" width="5" height="6"/></g>
+      </svg>
+      <span class="word">nett<span>by</span><small>nostalgi</small></span>
+    </button>
+    <div class="featured" id="featured"></div>
+    <div class="online-badge" id="onlinecount"></div>
   </div>
-  <div class="foot">Nettby Nostalgi er laget for moro skyld og har ingen tilknytning til det originale Nettby. Alle beboere her er oppdiktede. Data lagres bare i din egen nettleser.</div>
+  <nav class="nav" id="nav"></nav>
+  <div class="sub" id="sub"></div>
+  <div class="page">
+    <div id="main"></div>
+    <aside id="side"></aside>
+  </div>
+  <div class="foot">Nettby Nostalgi er en uoffisiell fan-replika laget for moro skyld, uten tilknytning til det originale Nettby, VG eller Schibsted. Alle borgere, grupper, nyheter og reklamer her er oppdiktede. Alt lagres bare i din egen nettleser.</div>
 </div>
 
 <script>
 (function () {
   "use strict";
-  var KEY = "nettby-nostalgi-v1";
+  var KEY = "nettby-nostalgi-v2";
   var mem = null;
-
-  // ---------- lagring ----------
-  function load() {
-    try { var raw = localStorage.getItem(KEY); if (raw) return JSON.parse(raw); } catch (e) {}
-    return mem;
-  }
+  function load() { try { var r = localStorage.getItem(KEY); if (r) return JSON.parse(r); } catch (e) {} return mem; }
   function save() {
     mem = db;
-    try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) {}
+    try { localStorage.setItem(KEY, JSON.stringify(db)); }
+    catch (e) { flash = "Nettleseren har ikke mer lagringsplass. Slett noen bilder og prøv igjen."; }
   }
 
   // ---------- hjelpere ----------
   var MIN = 60000, HOUR = 60 * MIN, DAY = 24 * HOUR;
+  var DAGER = ["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"];
+  var MND = ["januar", "februar", "mars", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember"];
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function pad(n) { return (n < 10 ? "0" : "") + n; }
   function when(ts) {
-    var d = new Date(ts), now = new Date();
-    var hm = pad(d.getHours()) + ":" + pad(d.getMinutes());
-    if (d.toDateString() === now.toDateString()) return "i dag " + hm;
-    var y = new Date(now.getTime() - DAY);
-    if (d.toDateString() === y.toDateString()) return "i går " + hm;
-    return pad(d.getDate()) + "." + pad(d.getMonth() + 1) + "." + d.getFullYear() + " " + hm;
+    var d = new Date(ts), now = new Date(), hm = "kl. " + pad(d.getHours()) + ":" + pad(d.getMinutes());
+    if (d.toDateString() === now.toDateString()) return "I dag, " + hm;
+    if (now - d < 6 * DAY) return DAGER[d.getDay()] + ", " + hm;
+    return d.getDate() + ". " + MND[d.getMonth()] + " " + d.getFullYear() + ", " + hm;
   }
+  function dateOnly(ts) { var d = new Date(ts); return d.getDate() + ". " + MND[d.getMonth()] + " " + d.getFullYear(); }
+  function today() { return new Date().toDateString(); }
   function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
   function uid() { return Math.random().toString(36).slice(2, 9); }
-  function initials(n) { var c = n.replace(/[^A-Za-zÆØÅæøå0-9]/g, ""); return (c.slice(0, 2) || "?").toUpperCase(); }
   function nl2br(s) { return esc(s).replace(/\n/g, "<br>"); }
+  function hash(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return Math.abs(h); }
+  function byId(list, id) { return list.filter(function (x) { return x.id === id; })[0]; }
 
-  var COLORS = ["#2f5d95", "#c0392b", "#8e44ad", "#16a085", "#d35400", "#e84393", "#2c3e50", "#27ae60", "#b7950b", "#6c5ce7", "#00838f", "#5d4037"];
-  var BYDELER = [
-    { id: "sentrum", navn: "Sentrum", om: "Der det skjer. Kino, kjøpesenter og alltid noen på MSN." },
-    { id: "havna", navn: "Havna", om: "Brygger, måker og folk som liker rolige kvelder." },
-    { id: "skogkanten", navn: "Skogkanten", om: "Emo, metal og lange innlegg om livet." },
-    { id: "solbakken", navn: "Solbakken", om: "Glitter, rosa gjestebøker og hjerter overalt." },
-    { id: "fjellsiden", navn: "Fjellsiden", om: "Ski, snowboard og folk som aldri er pålogget i helgene." },
-    { id: "elvebyen", navn: "Elvebyen", om: "Fotball, gaming og LAN-party hver fredag." }
-  ];
-  var FORA = [
-    { id: "musikk", navn: "Musikk", om: "Hva hører du på nå? Konserter, band og spillelister." },
-    { id: "kjaerlighet", navn: "Kjærlighet", om: "Forelsket? Kjærlighetssorg? Del og få råd." },
-    { id: "skole", navn: "Skole", om: "Lekser, lærere og hvor lenge det er til sommerferien." },
-    { id: "data", navn: "Data og spill", om: "WoW, Counter-Strike, MSN-triks og hjelp med PC-en." },
-    { id: "offtopic", navn: "Off topic", om: "Alt annet. Hold det hyggelig." }
-  ];
+  // ---------- ikoner ----------
+  var IC = {
+    house: '<path d="M2 8l6-5 6 5v6H10v-4H6v4H2z" fill="#c9472b"/><path d="M1 8l7-6 7 6" stroke="#7a2a17" fill="none" stroke-width="1.5"/>',
+    book: '<rect x="3" y="2" width="10" height="12" fill="#6b4b2a"/><rect x="5" y="3" width="7" height="10" fill="#f1e6c8"/>',
+    pen: '<path d="M3 13l1-3 7-7 2 2-7 7z" fill="#e3a21a"/><path d="M3 13l1-3 2 2z" fill="#333"/>',
+    chain: '<circle cx="5" cy="9" r="3" fill="none" stroke="#5c8a1e" stroke-width="2"/><circle cx="11" cy="6" r="3" fill="none" stroke="#8dc63f" stroke-width="2"/>',
+    cal: '<rect x="2" y="3" width="12" height="11" fill="#fff" stroke="#c33"/><rect x="2" y="3" width="12" height="3" fill="#c33"/>',
+    friends: '<circle cx="5" cy="6" r="2.5" fill="#d79a2b"/><circle cx="11" cy="6" r="2.5" fill="#5c8a1e"/><path d="M1 14c0-3 2-5 4-5s4 2 4 5zM7 14c0-3 2-5 4-5s4 2 4 5z" fill="#777"/>',
+    pic: '<rect x="2" y="3" width="12" height="10" fill="#fff" stroke="#555"/><path d="M3 12l3-4 2 2 2-3 3 5z" fill="#5c8a1e"/>',
+    link: '<path d="M4 12l8-8M6 3h7v7" stroke="#333" stroke-width="2" fill="none"/>',
+    mail: '<rect x="2" y="4" width="12" height="9" fill="#fff" stroke="#555"/><path d="M2 4l6 5 6-5" stroke="#555" fill="none"/>',
+    log: '<rect x="3" y="2" width="10" height="12" fill="#fff" stroke="#555"/><path d="M5 5h6M5 8h6M5 11h4" stroke="#555"/>',
+    bell: '<path d="M4 11V7a4 4 0 018 0v4l1 1H3z" fill="#e7b416"/><circle cx="8" cy="13.5" r="1.5" fill="#a77"/>',
+    status: '<path d="M2 3h12v8H7l-3 3v-3H2z" fill="#dde8f3" stroke="#57a"/>',
+    gear: '<circle cx="8" cy="8" r="5" fill="none" stroke="#555" stroke-width="3" stroke-dasharray="2 1.6"/><circle cx="8" cy="8" r="2" fill="#555"/>',
+    exit: '<rect x="2" y="2" width="12" height="12" fill="#d33"/><path d="M5 5l6 6M11 5l-6 6" stroke="#fff" stroke-width="2"/>',
+    talk: '<path d="M2 3h9v6H6l-2 2V9H2z" fill="#9cc6e8"/><path d="M7 7h7v5h-1v2l-2-2H7z" fill="#5c8a1e"/>',
+    check: '<circle cx="8" cy="8" r="6" fill="#5c8a1e"/><path d="M5 8l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/>',
+    pin: '<circle cx="8" cy="6" r="4" fill="#d33"/><path d="M8 10v5" stroke="#555" stroke-width="2"/>'
+  };
+  function ic(n) { return '<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">' + (IC[n] || "") + "</svg>"; }
+
+  // ---------- smileys og bilder ----------
+  var MOODS = { glad: "Glad", forelsket: "Forelsket", kul: "Kul", lei: "Lei meg", sint: "Sint", trott: "Trøtt" };
+  function smiley(mood, size) {
+    size = size || 40;
+    var mouth = { glad: '<path d="M11 22q9 8 18 0" stroke="#5a3a00" stroke-width="2.5" fill="none"/>', forelsket: '<path d="M12 22q8 7 16 0" stroke="#5a3a00" stroke-width="2.5" fill="none"/>',
+      kul: '<path d="M13 24q7 4 14 0" stroke="#5a3a00" stroke-width="2.5" fill="none"/>', lei: '<path d="M12 28q8-7 16 0" stroke="#5a3a00" stroke-width="2.5" fill="none"/>',
+      sint: '<path d="M12 27h16" stroke="#5a3a00" stroke-width="2.5"/>', trott: '<ellipse cx="20" cy="27" rx="4" ry="3" fill="#5a3a00"/>' }[mood] || "";
+    var eyes = { forelsket: '<path d="M10 14c0-3 4-3 4 0 0-3 4-3 4 0l-4 4zM22 14c0-3 4-3 4 0 0-3 4-3 4 0l-4 4z" fill="#d22"/>',
+      kul: '<rect x="8" y="12" width="10" height="6" rx="2" fill="#111"/><rect x="22" y="12" width="10" height="6" rx="2" fill="#111"/><path d="M18 14h4" stroke="#111" stroke-width="2"/>',
+      sint: '<path d="M10 12l7 3M30 12l-7 3" stroke="#5a3a00" stroke-width="2.5"/><circle cx="14" cy="17" r="2" fill="#5a3a00"/><circle cx="26" cy="17" r="2" fill="#5a3a00"/>',
+      trott: '<path d="M10 16h7M23 16h7" stroke="#5a3a00" stroke-width="2.5"/>' }[mood] || '<ellipse cx="14" cy="15" rx="2.2" ry="3" fill="#5a3a00"/><ellipse cx="26" cy="15" rx="2.2" ry="3" fill="#5a3a00"/>';
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 40 40" role="img" aria-label="' + esc(MOODS[mood] || "Humør") + '"><defs><radialGradient id="sg" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff6a0"/><stop offset=".5" stop-color="#ffd21f"/><stop offset="1" stop-color="#e59a00"/></radialGradient></defs><circle cx="20" cy="20" r="18" fill="url(#sg)" stroke="#b77900"/>' + eyes + mouth + "</svg>";
+  }
+  // tegnet portrett når borgeren ikke har lastet opp bilde
+  var BGS = ["#7aa6c2", "#c29a7a", "#8fb37a", "#b27aa6", "#7a7fb2", "#c2b27a", "#6f9d9a", "#b5837a", "#999", "#4f6f8f"];
+  var SKIN = ["#f1c8a8", "#e7b48e", "#c98e62", "#8d5a3b", "#f6d6bd"];
+  var HAIR = ["#2b1a10", "#5a3a1e", "#a86b2d", "#e2c26a", "#111", "#8a2d1e", "#3b2f5a"];
+  function portrait(name) {
+    var u = db.users[name];
+    if (u && u.photo) return '<img src="' + esc(u.photo) + '" alt="Profilbilde av ' + esc(name) + '">';
+    var h = hash(name), bg = BGS[h % BGS.length], sk = SKIN[(h >> 3) % SKIN.length], hr = HAIR[(h >> 6) % HAIR.length];
+    var shirt = BGS[(h >> 9) % BGS.length], f = u && u.gender === "f";
+    var hairBack = f ? '<path d="M28 40q-4 40 4 62h36q8-22 4-62q-22-20-44 0z" fill="' + hr + '"/>' : "";
+    var hairTop = f ? '<path d="M30 44q20-30 40 0q-8-10-20-8q-12-2-20 8z" fill="' + hr + '"/>' : '<path d="M30 44q2-22 20-22t20 22q-4-10-20-11q-16 1-20 11z" fill="' + hr + '"/>';
+    return '<svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Tegnet profilbilde av ' + esc(name) + '"><rect width="100" height="120" fill="' + bg + '"/>' + hairBack +
+      '<path d="M14 120q2-30 36-32q34 2 36 32z" fill="' + shirt + '" stroke="rgba(0,0,0,.2)"/><rect x="43" y="68" width="14" height="16" fill="' + sk + '"/>' +
+      '<ellipse cx="50" cy="50" rx="19" ry="23" fill="' + sk + '"/>' + hairTop +
+      '<circle cx="43" cy="51" r="2" fill="#222"/><circle cx="57" cy="51" r="2" fill="#222"/><path d="M44 62q6 4 12 0" stroke="#7a3b2a" stroke-width="2" fill="none"/></svg>';
+  }
+  function ph(name, cls) { return '<span class="ph ' + (cls || "") + '">' + portrait(name) + "</span>"; }
+
+  // ---------- byen ----------
+  var STEDER = {
+    "Oslo": ["St. Hanshaugen", "Grünerløkka", "Frogner", "Sagene", "Gamle Oslo", "Nordstrand"],
+    "Bergen": ["Bergenhus", "Årstad", "Fana", "Laksevåg"],
+    "Trondheim": ["Midtbyen", "Lerkendal", "Heimdal"],
+    "Stavanger": ["Eiganes og Våland", "Hillevåg", "Madla"],
+    "Tromsø": ["Sentrum", "Tromsdalen", "Kvaløysletta"],
+    "Kristiansand": ["Lund", "Vågsbygd", "Grim"]
+  };
+  var RANKS = [[0, "Nyinnflytter"], [50, "Skopusser"], [2000, "Avisbud"], [5000, "Bussjåfør"], [10000, "Brannmann"], [20000, "Politimester"], [40000, "Rådmann"], [80000, "Ordfører"]];
+  function rank(p) {
+    var i = 0; while (i + 1 < RANKS.length && p >= RANKS[i + 1][0]) i++;
+    return { name: RANKS[i][1], next: RANKS[i + 1] ? RANKS[i + 1][0] : null, from: RANKS[i][0] };
+  }
+  var DAILY = 20;
+  var NEWSCATS = ["Alle", "Nettby", "Norge", "Verden", "Teknologi", "Musikk", "Film", "Litteratur", "Sport"];
+  var OPPSLAG = ["Bil, MC, båt", "Data og tele", "Dyr og utstyr", "Lyd og bilde", "Ønskes leid", "Klær og sko", "Jobb", "Diverse"];
 
   // ---------- startdata ----------
   function seed() {
     var now = Date.now();
-    var people = [
-      ["xX_Sara_Xx", "pass", 15, "Moss", "solbakken", "#e84393", "<3 bestisene mine <3 svar i gb da!!", "Heihei! Jeg er Sara, 15 år og elsker Westlife, shopping og bestisene mine. Hater folk som ikke svarer i gb :P"],
-      ["Kjekkas88", "pass", 17, "Drammen", "sentrum", "#2c3e50", "på byen i kveld?", "Kjører moped, spiller fotball og er på Nettby når jeg kjeder meg. Legg meg til på MSN!"],
-      ["Emo_Martin", "pass", 16, "Hamar", "skogkanten", "#5d4037", "ingen forstår meg uansett...", "My Chemical Romance er livet. Svart er ikke en farge, det er en livsstil."],
-      ["lillemy_93", "pass", 14, "Bergen", "havna", "#16a085", "regner i Bergen, som vanlig", "Liker å tegne og skrive dikt. Leser Harry Potter for 4. gang."],
-      ["Fotballgutten", "pass", 15, "Trondheim", "elvebyen", "#27ae60", "RBK til topps!!!", "Trener 4 dager i uka. Rosenborg-fan for alltid."],
-      ["glitter_jenta", "pass", 13, "Tromsø", "solbakken", "#8e44ad", "*~*~ GLiTTeR ~*~*", "hEi aLLe sAmmEn!! jEg ElsKeR rOsA, hEsTeR oG gLiTTeR!!! kLeM tiL aLLe <33"],
-      ["skatern_ole", "pass", 16, "Stavanger", "fjellsiden", "#d35400", "kickflip landa endelig", "Skater, snowboarder, hører på Blink-182. Vinteren er best."],
-      ["MSN_Maria", "pass", 17, "Oslo", "sentrum", "#00838f", "pålogget på MSN hele kvelden", "Legg meg til! Bruker alt for mye tid på å lage MSN-navn med hjerter."],
-      ["LAN_Lars", "pass", 16, "Kristiansand", "elvebyen", "#6c5ce7", "LAN på fredag, hvem blir med?", "Counter-Strike 1.6, World of Warcraft og mye Solo. Har egen server."],
-      ["Ida_xoxo", "pass", 15, "Ålesund", "havna", "#c0392b", "forelsket? kanskje ;)", "Danser jazz og hip-hop. Elsker Beyoncé og O.C."]
+    var P = [
+      // navn, kjønn, alder, by, bydel, humør, om meg, status
+      ["sommerjenta93", "f", 16, "Bergen", "Årstad", "glad", "Hei! Jeg er Ine, 16 år, og elsker sommer, venner og Coldplay. Skriv i gb-en min, så svarer jeg alltid :) <3", "gleder meg til sommerferien!!"],
+      ["Gutten_fra_Lerkendal", "m", 17, "Trondheim", "Lerkendal", "kul", "Fotball, moped og PlayStation. RBK i hjertet. Ikke send meg kjedemeldinger.", "RBK til topps"],
+      ["svartsjel", "m", 16, "Oslo", "Sagene", "lei", "Jeg skriver dikt i dagboka. Les dem hvis du tør. Hører på Linkin Park og Evanescence.", "ingen forstår..."],
+      ["Mia_Glitter", "f", 14, "Tromsø", "Tromsdalen", "forelsket", "*~ HeiHei ~* jEg ElsKeR hEsTeR, rOsA oG bEsTiSeN mIn!! sKrIv i gB da <333", "forelsket <3 <3"],
+      ["skatepetter", "m", 15, "Stavanger", "Madla", "kul", "Skating hele sommeren, snowboard hele vinteren. Blink-182 og Sum 41 på repeat.", "landa kickflip i dag!"],
+      ["Kaja_xoxo", "f", 17, "Oslo", "Frogner", "glad", "Danser, synger og er alt for mye på MSN. Legg meg til! ~ Kaja ~", "pålogget msn hele kvelden"],
+      ["LANkongen", "m", 16, "Kristiansand", "Grim", "trott", "CS 1.6, WoW og LAN hver fredag. Har bygd PC-en selv.", "LAN i helga, hvem er med?"],
+      ["Emilie_96", "f", 13, "Oslo", "Nordstrand", "glad", "Går i 8. klasse og elsker Hannah Montana og High School Musical!", "ny klasse, nye venner :D"],
+      ["Bjørnar_77", "m", 32, "Bergen", "Fana", "glad", "Pappa til to og fortsatt på Nettby. Liker fjellturer og Brann.", "Brann vant igjen!"],
+      ["Tine_Love", "f", 15, "Trondheim", "Midtbyen", "forelsket", "Jeg er en jente som elsker å le. Hater falske folk. Kjærlighet er alt <3", "<3"],
+      ["MetalMagnus", "m", 18, "Oslo", "Gamle Oslo", "sint", "Metallica > alt annet. Spiller gitar i et band som ennå ikke har navn.", "øving i garasjen"],
+      ["solskinnsvenn", "f", 15, "Kristiansand", "Lund", "glad", "Sørlandet er best om sommeren! Svømming, is og venner :)", "badetemp 21 grader!!"],
+      ["Hestejenta_Ida", "f", 14, "Stavanger", "Hillevåg", "glad", "Rir hver dag på Stjerne, verdens fineste hest! Stall er livet.", "stall i dag :)"],
+      ["Mr_Pølse", "m", 19, "Tromsø", "Sentrum", "kul", "Ja, det er navnet mitt. Nei, jeg spiser ikke pølser. Studerer og jobber på kiosk.", "nattevakt på kiosken"]
     ];
     var users = {};
-    people.forEach(function (p, i) {
-      users[p[0]] = { name: p[0], pass: p[1], age: p[2], city: p[3], bydel: p[4], color: p[5], status: p[6], about: p[7],
-        points: 200 + Math.floor(Math.random() * 3000), joined: now - (400 + i * 60) * DAY, friends: [], requests: [], npc: true, visits: 50 + Math.floor(Math.random() * 900) };
+    P.forEach(function (p, i) {
+      users[p[0]] = { name: p[0], pass: "pass", gender: p[1], age: p[2], city: p[3], bydel: p[4], mood: p[5], about: p[6], status: p[7],
+        points: 60 + Math.floor(Math.random() * 9000), today: { day: today(), pts: Math.floor(Math.random() * 20) },
+        joined: now - (900 - i * 45) * DAY, friends: [], requests: [], npc: true, max: i % 4 === 0, visits: 100 + Math.floor(Math.random() * 3000),
+        bg: "#000000", fg: "#ffffff", photo: null, photos: [], diary: [], links: [], events: [], log: [], notes: [] };
     });
     function fr(a, b) { users[a].friends.push(b); users[b].friends.push(a); }
-    fr("xX_Sara_Xx", "glitter_jenta"); fr("xX_Sara_Xx", "Ida_xoxo"); fr("xX_Sara_Xx", "Kjekkas88");
-    fr("Kjekkas88", "Fotballgutten"); fr("Kjekkas88", "MSN_Maria"); fr("Emo_Martin", "lillemy_93");
-    fr("LAN_Lars", "Fotballgutten"); fr("skatern_ole", "Emo_Martin"); fr("MSN_Maria", "Ida_xoxo"); fr("LAN_Lars", "skatern_ole");
+    [["sommerjenta93", "Tine_Love"], ["sommerjenta93", "Bjørnar_77"], ["Gutten_fra_Lerkendal", "Tine_Love"], ["svartsjel", "MetalMagnus"], ["Mia_Glitter", "Hestejenta_Ida"],
+     ["skatepetter", "LANkongen"], ["Kaja_xoxo", "Emilie_96"], ["Kaja_xoxo", "sommerjenta93"], ["LANkongen", "Mr_Pølse"], ["solskinnsvenn", "Hestejenta_Ida"], ["Tine_Love", "Kaja_xoxo"]].forEach(function (x) { fr(x[0], x[1]); });
+
+    users["svartsjel"].diary.push({ id: uid(), title: "Regn", text: "Regnet treffer vinduet\nsom tanker uten svar.\nI morgen er det matteprøve.", ts: now - 2 * DAY });
+    users["sommerjenta93"].diary.push({ id: uid(), title: "Beste dagen ever!!", text: "Var på Bryggen med Tine og Kaja i dag, spiste is og så på båtene. Og så fikk jeg melding fra en viss person ;) Mer i morgen!", ts: now - 5 * HOUR });
+    users["Bjørnar_77"].diary.push({ id: uid(), title: "Tur til Ulriken", text: "Gikk opp med ungene i dag. Tåke på toppen, men vafler i sekken redder alt.", ts: now - 3 * DAY });
+    users["LANkongen"].links.push({ id: uid(), title: "Min CS-klan", url: "https://example.com" });
+    users["Kaja_xoxo"].events.push({ id: uid(), date: new Date(now + 4 * DAY).toISOString().slice(0, 10), title: "Danseoppvisning i Aula!" });
+    users["LANkongen"].events.push({ id: uid(), date: new Date(now + 2 * DAY).toISOString().slice(0, 10), title: "LAN i kjelleren, ta med egen skjerm" });
 
     var gb = [
-      ["xX_Sara_Xx", "glitter_jenta", "heiii bestis!! takk for sist <33 du er best i hele verden!! svar da :D", 25 * MIN],
-      ["xX_Sara_Xx", "Kjekkas88", "hei sara ;) ses i friminuttet", 3 * HOUR],
-      ["Kjekkas88", "MSN_Maria", "Hei! Var gøy på kino i går, legg meg til på MSN da :)", 50 * MIN],
-      ["Emo_Martin", "lillemy_93", "Leste diktet ditt. Det var veldig fint, egentlig. :)", 5 * HOUR],
-      ["lillemy_93", "Emo_Martin", "takk for at du leste diktet mitt. det betyr mye.", 4 * HOUR],
-      ["Fotballgutten", "LAN_Lars", "kommer du på LAN fredag? tar med pc-en min", 2 * HOUR],
-      ["glitter_jenta", "xX_Sara_Xx", "*~ KLEM TIL DEG ~* svar i min gb da!!! <333", 15 * MIN],
-      ["Ida_xoxo", "MSN_Maria", "Du må fortelle meg hvem det er!!! :O ring meg", 1.5 * HOUR],
-      ["skatern_ole", "LAN_Lars", "rå video av kickflippen din, mann", 1 * DAY],
-      ["MSN_Maria", "Ida_xoxo", "Heihei! Pålogget nå, kom på MSN :D", 40 * MIN]
+      ["sommerjenta93", "Tine_Love", "heiii bestis!! takk for sist <33 du er best i hele verden!! svar da :D", 25 * MIN],
+      ["sommerjenta93", "Kaja_xoxo", "hei vennen! kommer du på msn i kveld? :D", 3 * HOUR],
+      ["Gutten_fra_Lerkendal", "Tine_Love", "Hei! Var gøy i friminuttet i dag hehe ;)", 50 * MIN],
+      ["svartsjel", "MetalMagnus", "Bra dikt, mann. Kan bli en låt.", 5 * HOUR],
+      ["Mia_Glitter", "Hestejenta_Ida", "*~ KLEM TIL DEG ~* ses i stallen i morgen!!! <333", 15 * MIN],
+      ["LANkongen", "skatepetter", "kommer på LAN fredag, tar med pc-en min", 2 * HOUR],
+      ["Kaja_xoxo", "Emilie_96", "Du var så flink på danseøvelsen!! :O", 1.5 * HOUR],
+      ["Bjørnar_77", "sommerjenta93", "Hei onkel! Mamma sier hei :)", 1 * DAY],
+      ["Mr_Pølse", "LANkongen", "pølse eller lompe? svar ærlig", 40 * MIN]
     ].map(function (g) { return { id: uid(), to: g[0], from: g[1], text: g[2], ts: now - g[3] }; });
 
-    var threads = [
-      { cat: "musikk", title: "Beste band akkurat nå?", posts: [["Emo_Martin", "My Chemical Romance. Ingen diskusjon.", 6 * HOUR], ["xX_Sara_Xx", "Westlife!!! <3", 5 * HOUR], ["skatern_ole", "Blink-182 > alt", 4 * HOUR], ["Ida_xoxo", "Beyoncé, selvsagt.", 2 * HOUR]] },
-      { cat: "kjaerlighet", title: "Hvordan vet man om noen liker deg?", posts: [["Ida_xoxo", "Han skriver i gb-en min hver dag men sier ingenting på skolen... hva betyr det?", 1 * DAY], ["MSN_Maria", "Han liker deg 100%!! Spør han på MSN", 20 * HOUR], ["Kjekkas88", "Gutter er sjenerte, bare si hei", 18 * HOUR]] },
-      { cat: "skole", title: "Hjelp med matteleksa (brøk)", posts: [["glitter_jenta", "hvordan regner man ut 3/4 + 2/3?? skjønner ingenting", 3 * HOUR], ["lillemy_93", "Felles nevner 12: 9/12 + 8/12 = 17/12. Altså 1 og 5/12.", 2.5 * HOUR], ["glitter_jenta", "TAKK!!! du er best <3", 2 * HOUR]] },
-      { cat: "data", title: "LAN-party fredag – hvem blir med?", posts: [["LAN_Lars", "Har plass til 8 stk i kjelleren. Ta med egen PC og skjerm. CS 1.6 og WC3.", 2 * DAY], ["Fotballgutten", "Jeg er med!", 2 * DAY - HOUR], ["skatern_ole", "Hvis mamma kjører meg så kommer jeg", 1 * DAY]] },
-      { cat: "offtopic", title: "Hva er MSN-navnet deres?", posts: [["MSN_Maria", "Mitt er ~*~ Maria <3 livet er en fest ~*~ :D", 8 * HOUR], ["xX_Sara_Xx", "xX sArA Xx (L) bestisene mine (L)", 7 * HOUR], ["Emo_Martin", "...", 6 * HOUR]] }
-    ].map(function (t) {
-      var posts = t.posts.map(function (p) { return { author: p[0], text: p[1], ts: now - p[2] }; });
-      return { id: uid(), cat: t.cat, title: t.title, author: posts[0].author, ts: posts[0].ts, posts: posts };
-    });
+    function th(title, posts) { var ps = posts.map(function (p) { return { author: p[0], text: p[1], ts: now - p[2] }; }); return { id: uid(), title: title, author: ps[0].author, ts: ps[0].ts, posts: ps }; }
+    var groups = [
+      { id: uid(), name: "Vi som hater mandager", desc: "For alle som synes mandag burde vært en fridag.", owner: "Kaja_xoxo", members: ["Kaja_xoxo", "Tine_Love", "Mr_Pølse", "skatepetter", "Emilie_96"],
+        threads: [th("Hvorfor finnes mandag?", [["Kaja_xoxo", "Seriøst, hvem fant på dette?", 8 * HOUR], ["Mr_Pølse", "Romerne, tror jeg. Skyld på dem.", 7 * HOUR]])] },
+      { id: uid(), name: "Nettby – Bystyret (for de seriøse)", desc: "Diskusjon om hvordan vi gjør Nettby bedre for alle borgere.", owner: "Bjørnar_77", members: ["Bjørnar_77", "LANkongen", "sommerjenta93"],
+        threads: [th("Forslag: flere smileys!", [["sommerjenta93", "Vi trenger en smiley som blunker ;)", 1 * DAY], ["Bjørnar_77", "Notert til neste bystyremøte.", 20 * HOUR]])] },
+      { id: uid(), name: "Hestejenter i hele Norge", desc: "Bilder, tips og stallprat. Alle hesteelskere velkommen!", owner: "Hestejenta_Ida", members: ["Hestejenta_Ida", "Mia_Glitter", "solskinnsvenn"],
+        threads: [th("Hva heter hesten din?", [["Hestejenta_Ida", "Min heter Stjerne! Fortell om din :)", 2 * DAY], ["Mia_Glitter", "Lyn!! Han er en shetlandsponni <3", 2 * DAY - 3 * HOUR]])] },
+      { id: uid(), name: "LAN, CS og WoW", desc: "Klaner, servere og LAN-party.", owner: "LANkongen", members: ["LANkongen", "skatepetter", "Mr_Pølse", "Gutten_fra_Lerkendal"],
+        threads: [th("LAN-party fredag – hvem blir med?", [["LANkongen", "Plass til 8 i kjelleren. Ta med egen PC og skjerm.", 2 * DAY], ["skatepetter", "Hvis mamma kjører meg så kommer jeg", 1 * DAY]])] },
+      { id: uid(), name: "Kjærlighetssorg ♥", desc: "Et trygt sted å snakke om hjertet.", owner: "Tine_Love", members: ["Tine_Love", "sommerjenta93", "svartsjel"],
+        threads: [th("Hvordan vet man om noen liker deg?", [["Tine_Love", "Han skriver i gb-en min hver dag men sier ingenting på skolen...", 1 * DAY], ["sommerjenta93", "Han liker deg 100%!! Spør han på MSN", 20 * HOUR]])] },
+      { id: uid(), name: "Rock og metall", desc: "Band, konserter og gitarer.", owner: "MetalMagnus", members: ["MetalMagnus", "svartsjel"], threads: [] }
+    ];
+    var news = [
+      ["Nettby", "Klærne avslører hvem du er", "Ungdom sitter inne med stor kunnskap om klær og kodene de har. Kunnskapen brukes både til å komponere egen klesstil og til å lese andres. Er du skater, emo, preppy eller sporty? Si din mening i diskusjonen!", "Kaja_xoxo", 3 * HOUR, groups[0].id, "#6a8fc7"],
+      ["Musikk", "Årets beste låt? Stem nå!", "Borgerne i gruppa Rock og metall har startet en kåring av årets beste låt. Så langt leder Linkin Park, men popfansen er ikke langt bak.", "MetalMagnus", 9 * HOUR, groups[5].id, "#7a4b8c"],
+      ["Teknologi", "Slik lager du det kuleste MSN-navnet", "Hjerter, stjerner og (L)-koder: vi har samlet borgernes beste tips til et MSN-navn som får alle til å legge deg til.", "LANkongen", 1 * DAY, groups[3].id, "#2e7d6b"],
+      ["Sport", "Lokalderby avgjorde i siste minutt", "Det ble jubel på tribunen da hjemmelaget scoret på overtid. Borgere fra hele landet diskuterer kampen i gruppene.", "Gutten_fra_Lerkendal", 2 * DAY, null, "#3f7a2a"],
+      ["Film", "Kinokø for årets store fantasyfilm", "Mange borgere sto i kø i flere timer for premieren. Var den verdt ventetiden? Skriv din anmeldelse.", "Tine_Love", 3 * DAY, null, "#a6542c"]
+    ].map(function (n) { return { id: uid(), cat: n[0], title: n[1], text: n[2], author: n[3], ts: now - n[4], group: n[5], color: n[6], reads: 200 + Math.floor(Math.random() * 4000), comments: [] }; });
+    news[0].comments.push({ author: "skatepetter", text: "Skater for livet. Kan ikke se på folk med strikkegenser.", ts: now - 2 * HOUR });
 
-    return { users: users, gb: gb, threads: threads, msgs: [], me: null, version: 1 };
+    var ads = [
+      ["Bil, MC, båt", "Selger moped, Yamaha 2004", "Godt brukt, men går som en klokke. Hjelm følger med.", "Gutten_fra_Lerkendal"],
+      ["Data og tele", "Ønsker å kjøpe brukt MP3-spiller", "Helst 1 GB eller mer. Kan betale 300 kr.", "Emilie_96"],
+      ["Dyr og utstyr", "Gis bort: kaninunger", "Tre søte kaninunger trenger nytt hjem. Stavanger-området.", "Hestejenta_Ida"],
+      ["Lyd og bilde", "Selger el-gitar med forsterker", "Perfekt for nybegynner. Litt ripete.", "MetalMagnus"],
+      ["Ønskes leid", "Hybel nær UiT ønskes", "Rolig student søker hybel fra august.", "Mr_Pølse"]
+    ].map(function (a, i) { return { id: uid(), cat: a[0], title: a[1], text: a[2], author: a[3], ts: now - (i + 1) * 7 * HOUR }; });
+
+    return { users: users, gb: gb, msgs: [], groups: groups, news: news, ads: ads, me: null, started: false, citizensBase: 478730 };
   }
 
   var db = load() || seed();
-  save();
 
   // ---------- tilstand ----------
-  var view = { name: "forside" };
+  var view = { name: "nyheter", cat: "Alle" };
   var flash = "";
-  var online = pickOnline();
+  var online = [];
+  var onlineFake = 20000 + Math.floor(Math.random() * 1500);
+  function pickOnline() { online = npcs().filter(function () { return Math.random() < 0.55; }); }
+  pickOnline();
 
-  function pickOnline() {
-    var names = Object.keys(db.users).filter(function (n) { return db.users[n].npc; });
-    return names.filter(function () { return Math.random() < 0.6; });
-  }
+  function npcs() { return Object.keys(db.users).filter(function (n) { return db.users[n].npc; }); }
   function me() { return db.me ? db.users[db.me] : null; }
   function user(n) { return db.users[n]; }
   function isOnline(n) { return n === db.me || online.indexOf(n) !== -1; }
-  function unreadCount() { var m = me(); if (!m) return 0; return db.msgs.filter(function (x) { return x.to === m.name && !x.read; }).length; }
-  function addPoints(n) { var m = me(); if (m) { m.points += n; } }
-
-  function av(name, cls) {
-    var u = user(name), c = u ? u.color : "#888";
-    return '<span class="av ' + (cls || "") + '" style="background:' + esc(c) + '" aria-hidden="true">' + esc(initials(name)) + "</span>";
+  function sym(u) { return u.gender === "f" ? '<span class="f">♀</span>' : '<span class="m">♂</span>'; }
+  function ulink(n, plain) {
+    var u = user(n); if (!u) return esc(n);
+    return '<button class="lnk' + (plain ? "" : " u") + '" data-go="profil" data-arg="' + esc(n) + '">' + esc(n) + "</button>" + (plain ? "" : " " + u.age + sym(u)) + (u.max && !plain ? ' <span class="maxbadge">MAX</span>' : "");
   }
-  function ulink(name) { return '<button class="lnk" data-go="house" data-arg="' + esc(name) + '"><b>' + esc(name) + "</b></button>"; }
+  function addPoints(n) {
+    var m = me(); if (!m) return 0;
+    if (m.today.day !== today()) m.today = { day: today(), pts: 0 };
+    var give = Math.max(0, Math.min(n, DAILY - m.today.pts));
+    m.today.pts += give; m.points += give; return give;
+  }
+  function notify(name, text, go, arg) { var u = user(name); if (!u || u.npc) return; u.notes.unshift({ id: uid(), text: text, ts: Date.now(), read: false, go: go, arg: arg }); }
+  function unreadMsgs() { var m = me(); return m ? db.msgs.filter(function (x) { return x.to === m.name && !x.read; }).length : 0; }
+  function unreadNotes() { var m = me(); return m ? m.notes.filter(function (x) { return !x.read; }).length : 0; }
 
-  // ---------- navigasjon ----------
-  function go(name, arg) { view = { name: name, arg: arg }; render(); window.scrollTo(0, 0); }
+  // ---------- første besøk: logg inn automatisk ----------
+  function createUser(name, opts) {
+    opts = opts || {};
+    var city = opts.city || "Oslo";
+    db.users[name] = { name: name, pass: opts.pass || "", gender: opts.gender || "m", age: opts.age || 16, city: city, bydel: opts.bydel || STEDER[city][0], mood: "glad",
+      about: "", status: "ny på Nettby!", points: 0, today: { day: today(), pts: 0 }, joined: Date.now(), friends: [], requests: [], visits: 0,
+      bg: "#000000", fg: "#ffffff", photo: null, photos: [], diary: [], links: [], events: [], log: [], notes: [], max: false };
+    var nb = Object.keys(db.users).filter(function (n) { return db.users[n].npc && db.users[n].city === city; })[0] || "Kaja_xoxo";
+    db.gb.push({ id: uid(), to: name, from: nb, text: "Velkommen til Nettby! :D Legg meg til som venn da", ts: Date.now() });
+    db.users[name].requests.push(nb);
+    notify(name, nb + " har skrevet i gjesteboka di.", "profil", name);
+    notify(name, nb + " vil bli venn med deg.", "venner");
+  }
+  if (!db.started) {
+    var base = "NyBorger", n = base, i = 1;
+    while (db.users[n]) n = base + (++i);
+    createUser(n);
+    db.me = n; db.started = true;
+    flash = "Velkommen til Nettby! Du er logget inn automatisk som " + n + ". Bytt brukernavn, bilde og farger under Innstillinger.";
+    view = { name: "profil", arg: n, tab: "profil" };
+  }
+  save();
 
-  function renderTabs() {
-    var m = me();
-    var tabs = [["forside", "Forside"], ["house", "Mitt hus"], ["gjestebok", "Gjestebok"], ["venner", "Venner"], ["forum", "Forum"], ["meldinger", "Meldinger"], ["bydeler", "Bydeler"], ["sok", "Søk"]];
-    var reqs = m ? m.requests.length : 0, unread = unreadCount();
-    document.getElementById("tabs").innerHTML = tabs.map(function (t) {
-      var on = view.name === t[0] && (t[0] !== "house" || view.arg === db.me) ? " on" : "";
-      var extra = "";
-      if (t[0] === "meldinger" && unread) extra = '<span class="cnt">' + unread + "</span>";
-      if (t[0] === "venner" && reqs) extra = '<span class="cnt">' + reqs + "</span>";
-      var arg = t[0] === "house" ? ' data-arg="' + esc(db.me || "") + '"' : "";
-      return '<button class="' + on + '" data-go="' + t[0] + '"' + arg + ">" + t[1] + extra + "</button>";
+  // ---------- topp, meny og sidekolonne ----------
+  var NAV = [["nyheter", "Nyheter"], ["finn", "Finn borger"], ["grupper", "Grupper"], ["mot", "Møt"], ["oppslag", "Oppslag"], ["siste", "Siste"], ["ansikter", "Ansikter"], ["max", 'Nettby <span class="max">Max</span>'], ["hjelp", "Hjelp"]];
+  var NAVOF = { gruppe: "grupper", trad: "grupper", artikkel: "nyheter", annonse: "oppslag" };
+  var PTABS = [["profil", "house", null], ["dagbok", "book", "Dagbok"], ["gjestebok", "pen", "Gjestebok"], ["grupper", "chain", "Grupper"], ["kalender", "cal", "Kalender"], ["venner", "friends", "Venner"], ["bilder", "pic", "Bilder"], ["linker", "link", "Linker"]];
+
+  function renderHead() {
+    var feat = online.slice().sort(function () { return Math.random() - .5; }).slice(0, 4);
+    document.getElementById("featured").innerHTML = feat.map(function (n) {
+      var u = user(n);
+      return '<div class="fcard">' + ph(n) + '<div class="meta"><button class="lnk u" data-go="profil" data-arg="' + esc(n) + '">' + esc(n) + "</button><br>" + u.age + sym(u) + "</div></div>";
     }).join("");
-    document.getElementById("who").innerHTML = m
-      ? 'Logget inn som <b>' + esc(m.name) + '</b> · <span class="points">' + m.points + ' poeng</span><br><button class="lnk" data-act="logout">Logg ut</button>'
-      : 'Du er ikke logget inn<br><button class="lnk" data-go="registrer">Flytt inn i Nettby</button>';
+    document.getElementById("onlinecount").textContent = onlineFake.toLocaleString("nb-NO") + " pålogget";
+    var active = NAVOF[view.name] || view.name;
+    document.getElementById("nav").innerHTML = NAV.map(function (t) { return '<button class="' + (active === t[0] ? "on" : "") + '" data-go="' + t[0] + '">' + t[1] + "</button>"; }).join("");
   }
 
-  function renderLeft() {
-    var m = me(), h = "";
-    if (!m) {
-      h += '<div class="box"><div class="bh">Logg inn</div><div class="bb"><form class="form" data-form="login">' +
-        '<label>Brukernavn<input type="text" id="li-user" name="user" autocomplete="username"></label>' +
-        '<label>Passord<input type="password" id="li-pass" name="pass" autocomplete="current-password"></label>' +
-        '<div class="err" id="li-err"></div><div class="row"><button class="btn" type="submit">Logg inn</button></div></form>' +
-        '<div class="small">Ny her? <button class="lnk" data-go="registrer">Flytt inn nå!</button></div>' +
-        '<div class="small">Eller <button class="lnk" data-act="demo">prøv som demobruker</button></div></div></div>';
+  function renderSub() {
+    var s = document.getElementById("sub"), h = "";
+    if (view.name === "profil") {
+      h = PTABS.map(function (t) {
+        var label = t[2] || esc(view.arg);
+        return '<button class="' + ((view.tab || "profil") === t[0] ? "on" : "") + '" data-go="profil" data-arg="' + esc(view.arg) + '" data-tab="' + t[0] + '">' + ic(t[1]) + label + "</button>";
+      }).join("");
+    } else if (view.name === "nyheter") {
+      h = NEWSCATS.map(function (c) { return '<button class="' + (view.cat === c ? "on" : "") + '" data-go="nyheter" data-cat="' + c + '">' + c + "</button>"; }).join("");
+    } else if (view.name === "grupper" || view.name === "gruppe" || view.name === "trad") {
+      h = '<button class="' + (view.name === "grupper" && !view.mine ? "on" : "") + '" data-go="grupper">' + ic("chain") + 'Alle grupper</button><button class="' + (view.mine ? "on" : "") + '" data-go="grupper" data-mine="1">' + ic("friends") + 'Mine grupper</button><button data-go="nygruppe">' + ic("pen") + "Opprett gruppe</button>";
+    } else if (view.name === "postkasse" || view.name === "melding" || view.name === "skriv") {
+      h = '<button class="' + (view.name === "postkasse" && !view.sent ? "on" : "") + '" data-go="postkasse">' + ic("mail") + 'Innboks</button><button class="' + (view.sent ? "on" : "") + '" data-go="postkasse" data-sent="1">Sendt</button><button class="' + (view.name === "skriv" ? "on" : "") + '" data-go="skriv">' + ic("pen") + "Ny melding</button>";
     } else {
-      h += '<div class="box alt"><div class="bh">Meg</div><div class="bb"><div class="uline">' + av(m.name) + "<div>" + ulink(m.name) +
-        '<div class="muted">' + esc(m.age) + " år, " + esc(m.city) + "</div></div></div>" +
-        '<div class="small">Poeng: <span class="points">' + m.points + "</span></div>" +
-        '<div class="small"><button class="lnk" data-go="house" data-arg="' + esc(m.name) + '">Mitt hus</button> · <button class="lnk" data-go="rediger">Rediger huset</button></div></div></div>';
+      h = '<button class="on" data-go="' + esc(view.name) + '">' + esc(TITLES[view.name] || "Nettby") + "</button>";
     }
-    h += '<div class="box" id="online">' + onlineHtml() + "</div>";
-    document.getElementById("left").innerHTML = h;
+    s.innerHTML = h;
   }
-  function onlineHtml() {
-    var on = Object.keys(db.users).filter(isOnline);
-    return '<div class="bh"><span>Pålogget nå</span><span>' + on.length + '</span></div><div class="bb ulist">' +
-      on.map(function (n) { return '<div class="uline"><span class="dot"></span>' + ulink(n) + "</div>"; }).join("") + "</div>";
-  }
+  var TITLES = { finn: "Finn borger", mot: "Møt", oppslag: "Oppslagstavla", annonse: "Oppslagstavla", siste: "Siste", ansikter: "Ansikter", max: "Nettby Max", hjelp: "Hjelp", logg: "Logg", varsler: "Varsler", status: "Status", innstillinger: "Innstillinger", debatter: "Debatter", bydel: "Bydel", artikkel: "Nyheter", nygruppe: "Opprett gruppe", flyttinn: "Flytt inn", loggut: "Logget ut" };
 
-  function renderRight() {
-    var names = Object.keys(db.users).sort(function (a, b) { return db.users[b].joined - db.users[a].joined; }).slice(0, 5);
-    var top = Object.keys(db.users).sort(function (a, b) { return db.users[b].points - db.users[a].points; }).slice(0, 5);
-    var h = '<div class="box"><div class="bh">Nyeste innbyggere</div><div class="bb ulist">' +
-      names.map(function (n) { return '<div class="uline">' + av(n, "tiny") + ulink(n) + "</div>"; }).join("") + "</div></div>";
-    h += '<div class="box"><div class="bh">Toppliste poeng</div><div class="bb"><table class="list">' +
-      top.map(function (n, i) { return "<tr><td>" + (i + 1) + ".</td><td>" + ulink(n) + '</td><td class="num points">' + db.users[n].points + "</td></tr>"; }).join("") + "</table></div></div>";
-    h += '<div class="box alt"><div class="bh">Dagens tips</div><div class="bb small">' + esc(pick([
-      "Husk å svare i gjesteboka til vennene dine!",
-      "Bytt farge på huset ditt under «Rediger huset».",
-      "Skriv i forumet for å tjene Nettby-poeng.",
-      "Del aldri passordet ditt med noen. Heller ikke bestisen.",
-      "Nye venner? Besøk en bydel og se hvem som bor der."
-    ])) + "</div></div>";
-    document.getElementById("right").innerHTML = h;
+  function renderSide() {
+    var m = me(), h = "";
+    if (m) {
+      var um = unreadMsgs(), un = unreadNotes(), r = m.requests.length;
+      function L(go, icon, text, extra, arg) { return '<button class="lnk" data-go="' + go + '"' + (arg != null ? ' data-arg="' + esc(arg) + '"' : "") + ">" + ic(icon) + "<span>" + text + "</span>" + (extra ? ' <span class="cnt">' + extra + "</span>" : "") + "</button>"; }
+      function P(tab, icon, text) { return '<button class="lnk" data-go="profil" data-arg="' + esc(m.name) + '" data-tab="' + tab + '">' + ic(icon) + "<span>" + text + "</span>" + (tab === "venner" && r ? ' <span class="cnt">' + r + "</span>" : "") + "</button>"; }
+      h += '<div class="umenu"><div class="grpm">' + P("profil", "house", esc(m.name)) + L("postkasse", "mail", "Postkasse", um) + L("logg", "log", "Logg") + L("varsler", "bell", "Varsler", un) + L("status", "status", "Status") + "</div>" +
+        '<div class="grpm">' + P("dagbok", "book", "Dagbok") + P("gjestebok", "pen", "Gjestebok") + P("kalender", "cal", "Kalender") + P("venner", "friends", "Venner") + P("bilder", "pic", "Bilder") + P("linker", "link", "Linker") + "</div>" +
+        '<div class="grpm">' + P("grupper", "chain", "Grupper") + L("debatter", "talk", "Debatter") + L("bydel", "check", esc(m.bydel), null, m.city + "|" + m.bydel) + "</div>" +
+        '<div class="grpm">' + L("innstillinger", "house", "Innstillinger") + "</div>" +
+        '<div class="moods">' + smiley(m.mood, 30) + '<button class="lnk" data-go="status" aria-label="Endre status">' + '<svg width="30" height="30" viewBox="0 0 16 16" aria-hidden="true">' + IC.status + "</svg></button></div>" +
+        '<div class="grpm">' + '<button class="lnk" data-act="logout">' + ic("exit") + "<span>Logg ut</span></button></div></div>";
+      var rk = rank(m.points);
+      h += '<div class="box g"><div class="bh">Din aktivitet</div><div class="bb small"><div>Poeng i dag: <b class="num">' + (m.today.day === today() ? m.today.pts : 0) + "/" + DAILY + "</b></div><div>Poeng totalt: <b class=\"num\">" + m.points + "</b></div><div>Tittel: <b>" + rk.name + "</b></div></div></div>";
+    } else {
+      h += '<div class="box"><div class="bh">' + ic("pin") + ' Logg inn</div><div class="bb"><form class="form" data-form="login">' +
+        '<label>Brukernavn:<input type="text" id="li-user" name="user" autocomplete="username"></label><label>Passord:<input type="password" id="li-pass" name="pass" autocomplete="current-password"></label>' +
+        '<div class="err" id="li-err"></div><button class="btn" type="submit">Logg inn</button></form><button class="btn" data-go="flyttinn">Flytt inn</button><button class="btn" data-act="forgot">Glemt passord?</button></div></div>';
+    }
+    var sist = Object.keys(db.users).filter(isOnline).slice(0, 14);
+    h += '<div class="box g"><div class="bh">Sist pålogget</div><div class="bb ulist small">' + sist.map(function (n) { return "<div>" + ulink(n) + "</div>"; }).join("") + "</div></div>";
+    document.getElementById("side").innerHTML = h;
   }
 
   // ---------- visninger ----------
   var V = {};
-
-  V.forside = function () {
-    var m = me();
-    var h = flashHtml();
-    h += '<div class="box"><div class="bh">Velkommen til Nettby</div><div class="bb">' +
-      (m ? "<p style=\"margin:0\">Hei <b>" + esc(m.name) + "</b>! Kjekt å se deg igjen. Du har <b>" + unreadCount() + "</b> uleste meldinger og <b>" + m.requests.length + "</b> venneforespørsler.</p>"
-         : "<p style=\"margin:0\">Nettby er byen på nettet der du har ditt eget hus, en gjestebok vennene dine kan skrive i, og et forum for alt mellom himmel og jord. <b>" + Object.keys(db.users).length + "</b> innbyggere har allerede flyttet inn.</p><div class=\"row\"><button class=\"btn\" data-go=\"registrer\">Flytt inn nå</button><button class=\"btn grey\" data-act=\"demo\">Prøv som demobruker</button></div>") +
-      "</div></div>";
-    var latest = db.gb.slice().sort(function (a, b) { return b.ts - a.ts; }).slice(0, 6);
-    h += '<div class="box"><div class="bh">Siste i gjestebøkene</div><div class="bb gb">' + latest.map(function (g) {
-      return '<div class="gbe">' + av(g.from) + '<div class="t">' + ulink(g.from) + ' <span class="muted">→</span> ' + ulink(g.to) + ' <span class="muted">' + when(g.ts) + "</span><br>" + nl2br(g.text) + "</div></div>";
-    }).join("") + "</div></div>";
-    var tr = db.threads.slice().sort(function (a, b) { return last(b).ts - last(a).ts; }).slice(0, 5);
-    h += '<div class="box"><div class="bh">Ferskt i forumet</div><div class="bb"><table class="list"><tr><th>Tråd</th><th>Svar</th><th>Siste</th></tr>' +
-      tr.map(threadRow).join("") + "</table></div></div>";
-    return h;
-  };
-
-  function last(t) { return t.posts[t.posts.length - 1]; }
-  function threadRow(t) {
-    var l = last(t);
-    return '<tr><td><button class="lnk" data-go="trad" data-arg="' + t.id + '"><b>' + esc(t.title) + '</b></button><br><span class="muted">' + esc(forum(t.cat).navn) + " · av " + esc(t.author) + '</span></td><td class="num">' + (t.posts.length - 1) + '</td><td class="small">' + when(l.ts) + "<br>av " + esc(l.author) + "</td></tr>";
-  }
-  function forum(id) { return FORA.filter(function (f) { return f.id === id; })[0] || FORA[0]; }
-  function bydel(id) { return BYDELER.filter(function (b) { return b.id === id; })[0] || BYDELER[0]; }
-
-  function needLogin(what) {
-    return '<div class="box"><div class="bh">' + esc(what) + '</div><div class="bb"><p style="margin:0">Du må være logget inn for å se dette.</p><div class="row"><button class="btn" data-go="registrer">Flytt inn</button><button class="btn grey" data-act="demo">Prøv som demobruker</button></div></div></div>';
-  }
   function flashHtml() { if (!flash) return ""; var f = flash; flash = ""; return '<div class="flash">' + esc(f) + "</div>"; }
+  function needLogin() { return '<div class="box"><div class="bh">Logg inn</div><div class="bb">Du må være logget inn for å se dette. <div class="row"><button class="btn go" data-go="flyttinn">Flytt inn</button></div></div></div>'; }
+  function cols(kind, parts) { return '<div class="cols ' + kind + '">' + parts.map(function (p) { return "<div>" + p + "</div>"; }).join("") + "</div>"; }
 
-  V.house = function (name) {
-    name = name || db.me;
-    if (!name) return needLogin("Mitt hus");
-    var u = user(name);
-    if (!u) return '<div class="box"><div class="bh">Fant ikke huset</div><div class="bb">Ingen bor på denne adressen.</div></div>';
-    var m = me(), own = m && m.name === name;
-    if (!own && !u._counted) { u.visits = (u.visits || 0) + 1; u._counted = true; save(); }
-    var isFriend = m && m.friends.indexOf(name) !== -1;
-    var pending = m && u.requests.indexOf(m.name) !== -1;
-    var h = flashHtml();
-    h += '<div class="box house" style="--hc:' + esc(u.color) + '"><div class="bh"><span>' + esc(u.name) + 's hus</span><span>' + (isOnline(name) ? '<span class="blink">●</span> pålogget' : "ikke pålogget") + '</span></div><div class="bb">' +
-      '<div class="prof">' + av(name, "big") + '<div style="display:flex;flex-direction:column;gap:6px;min-width:0">' +
-      (u.status ? '<div class="status">«' + esc(u.status) + "»</div>" : "") +
-      '<table class="info"><tr><td>Alder</td><td>' + esc(u.age) + " år</td></tr><tr><td>Bosted</td><td>" + esc(u.city) + "</td></tr>" +
-      '<tr><td>Bydel</td><td><button class="lnk" data-go="bydel" data-arg="' + esc(u.bydel) + '">' + esc(bydel(u.bydel).navn) + "</button></td></tr>" +
-      '<tr><td>Poeng</td><td class="points">' + u.points + "</td></tr><tr><td>Besøk</td><td>" + (u.visits || 0) + "</td></tr>" +
-      "<tr><td>Flyttet inn</td><td>" + when(u.joined).replace(/ \d\d:\d\d$/, "") + "</td></tr></table>" +
-      '<div class="row">' + (own ? '<button class="btn" data-go="rediger">Rediger huset</button>'
-        : m ? (isFriend ? '<span class="small">✓ Dere er venner</span>' : pending ? '<span class="small">Venneforespørsel sendt</span>' : '<button class="btn" data-act="addfriend" data-arg="' + esc(name) + '">Legg til som venn</button>') +
-          '<button class="btn grey" data-go="skriv" data-arg="' + esc(name) + '">Send melding</button>' : "") +
-      "</div></div></div>" +
-      '<div><b>Om meg</b><div style="overflow-wrap:anywhere">' + (u.about ? nl2br(u.about) : '<span class="muted">Ingenting her ennå.</span>') + "</div></div></div></div>";
-
-    h += '<div class="box"><div class="bh"><span>Venner</span><span>' + u.friends.length + '</span></div><div class="bb"><div class="row">' +
-      (u.friends.length ? u.friends.map(function (f) { return '<span class="uline">' + av(f, "tiny") + ulink(f) + "</span>"; }).join("") : '<span class="muted">Ingen venner ennå.</span>') + "</div></div></div>";
-
-    var entries = db.gb.filter(function (g) { return g.to === name; }).sort(function (a, b) { return b.ts - a.ts; });
-    h += '<div class="box" id="gb"><div class="bh"><span>Gjestebok</span><span>' + entries.length + " innlegg</span></div><div class=\"bb gb\">";
-    if (m) h += '<form class="form" data-form="gb" data-arg="' + esc(name) + '"><label>Skriv i ' + (own ? "din egen" : esc(name) + "s") + ' gjestebok<textarea id="gb-text" name="text" maxlength="1000" required></textarea></label><div class="row"><button class="btn" type="submit">Skriv innlegg</button><span class="muted">+5 poeng</span></div></form>';
-    h += entries.length ? entries.map(function (g) {
-      var canDel = m && (own || g.from === m.name);
-      var reply = m && own && g.from !== m.name ? ' · <button class="lnk" data-go="house" data-arg="' + esc(g.from) + '">Svar i ' + esc(g.from) + "s gb</button>" : "";
-      return '<div class="gbe">' + av(g.from) + '<div class="t">' + ulink(g.from) + ' <span class="muted">' + when(g.ts) + reply +
-        (canDel ? ' · <button class="lnk" data-act="delgb" data-arg="' + g.id + '">slett</button>' : "") + "</span><br>" + nl2br(g.text) + "</div></div>";
-    }).join("") : '<div class="muted">Gjesteboka er tom. Bli den første til å skrive!</div>';
-    h += "</div></div>";
-    return h;
+  V.nyheter = function () {
+    var cat = view.cat || "Alle";
+    var list = db.news.filter(function (n) { return cat === "Alle" || n.cat === cat; }).sort(function (a, b) { return b.ts - a.ts; });
+    var left = (me() ? "" : '<button class="borger" data-go="flyttinn">' + ic("pen") + "Bli borger</button>") +
+      '<div class="box"><div class="bh">Grupper</div><div class="bb"><div class="muted">Siste grupper med aktivitet</div>' +
+      db.groups.slice().sort(function (a, b) { return lastAct(b) - lastAct(a); }).map(function (g) { return '<div class="grp">' + ic("chain") + '<button class="lnk" data-go="gruppe" data-arg="' + g.id + '">' + esc(g.name) + "</button></div>"; }).join("") + "</div></div>";
+    var mid = flashHtml() + '<div class="box plain"><div class="bh">Nyheter</div><div class="bb"><div class="muted">Utvalgte nyheter fra Nettbys grupper.</div>' +
+      (list.length ? list.map(newsItem).join("") : '<div class="muted">Ingen nyheter i kategorien ' + esc(cat) + " ennå.</div>") +
+      (me() ? '<button class="btn" data-go="skrivnyhet">Skriv en nyhet</button>' : "") + "</div></div>";
+    var total = db.citizensBase + Object.keys(db.users).length;
+    var maxers = Object.keys(db.users).filter(function (n) { return db.users[n].max; }).slice(0, 6);
+    var counts = OPPSLAG.map(function (c) { return [c, db.ads.filter(function (a) { return a.cat === c; }).length]; });
+    var right = '<div class="count"><b class="num">' + total + "</b>borgere siden<br>14. september 2006</div>" +
+      '<div class="box"><div class="bh">Siste med Nettby Max</div><div class="bb"><div class="maxgrid">' + maxers.map(function (n) { return '<button data-go="profil" data-arg="' + esc(n) + '" aria-label="' + esc(n) + '">' + portrait(n) + "</button>"; }).join("") +
+      '</div><button class="lnk small" data-go="max">' + ic("pic") + " Dette er Nettby Max</button></div></div>" +
+      '<div class="box"><div class="bh">Oppslagstavla</div><div class="bb small">' + counts.map(function (c) { return '<div>• <button class="lnk" data-go="oppslag" data-arg="' + esc(c[0]) + '">' + esc(c[0]) + "</button> (" + c[1] + ")</div>"; }).join("") + "</div></div>";
+    return cols("front", [left, mid, right]);
   };
-
-  V.gjestebok = function () { if (!db.me) return needLogin("Gjestebok"); return V.house(db.me); };
-
-  V.rediger = function () {
-    var m = me(); if (!m) return needLogin("Rediger huset");
-    return '<div class="box"><div class="bh">Rediger huset ditt</div><div class="bb"><form class="form" data-form="edit">' +
-      '<label>Status<input type="text" id="ed-status" name="status" maxlength="80" value="' + esc(m.status) + '"></label>' +
-      '<label>Alder<input type="number" id="ed-age" name="age" min="10" max="99" value="' + esc(m.age) + '"></label>' +
-      '<label>Bosted<input type="text" id="ed-city" name="city" maxlength="40" value="' + esc(m.city) + '"></label>' +
-      '<label>Bydel<select id="ed-bydel" name="bydel">' + BYDELER.map(function (b) { return '<option value="' + b.id + '"' + (b.id === m.bydel ? " selected" : "") + ">" + b.navn + "</option>"; }).join("") + "</select></label>" +
-      '<label>Om meg<textarea id="ed-about" name="about" maxlength="2000">' + esc(m.about) + "</textarea></label>" +
-      '<div><div class="muted" style="margin-bottom:3px">Farge på huset</div><div class="swatches" role="radiogroup" aria-label="Farge på huset">' +
-      COLORS.map(function (c) { return '<button type="button" role="radio" aria-checked="' + (c === m.color) + '" aria-label="Farge ' + c + '" class="' + (c === m.color ? "on" : "") + '" style="background:' + c + '" data-act="color" data-arg="' + c + '"></button>'; }).join("") +
-      '</div></div><div class="row"><button class="btn" type="submit">Lagre</button><button class="btn grey" type="button" data-go="house" data-arg="' + esc(m.name) + '">Avbryt</button></div></form></div></div>';
-  };
-
-  V.venner = function () {
-    var m = me(); if (!m) return needLogin("Venner");
-    var h = flashHtml();
-    if (m.requests.length) {
-      h += '<div class="box"><div class="bh">Venneforespørsler</div><div class="bb ulist">' + m.requests.map(function (r) {
-        return '<div class="uline">' + av(r) + "<div>" + ulink(r) + ' vil bli venn med deg<div class="row"><button class="btn" data-act="accept" data-arg="' + esc(r) + '">Godta</button><button class="btn grey" data-act="decline" data-arg="' + esc(r) + '">Avslå</button></div></div></div>';
-      }).join("") + "</div></div>";
-    }
-    h += '<div class="box"><div class="bh"><span>Mine venner</span><span>' + m.friends.length + '</span></div><div class="bb">' +
-      (m.friends.length ? '<div class="grid2">' + m.friends.map(function (f) {
-        var u = user(f);
-        return '<div class="card"><div class="uline">' + av(f) + "<div>" + ulink(f) + '<div class="muted">' + esc(u.age) + " år, " + esc(u.city) + "</div></div></div>" +
-          '<div class="small">' + (isOnline(f) ? '<span class="dot" style="display:inline-block"></span> pålogget' : '<span class="muted">ikke pålogget</span>') + "</div>" +
-          '<div class="small"><button class="lnk" data-go="house" data-arg="' + esc(f) + '">Gjestebok</button> · <button class="lnk" data-go="skriv" data-arg="' + esc(f) + '">Melding</button></div></div>';
-      }).join("") + "</div>" : '<div class="muted">Du har ingen venner ennå. Besøk <button class="lnk" data-go="bydeler">bydelene</button> og legg til noen!</div>') +
-      "</div></div>";
-    return h;
-  };
-
-  V.forum = function () {
-    var h = flashHtml() + '<div class="box"><div class="bh">Forum</div><div class="bb"><table class="list"><tr><th>Forum</th><th>Tråder</th><th>Innlegg</th></tr>';
-    h += FORA.map(function (f) {
-      var ts = db.threads.filter(function (t) { return t.cat === f.id; });
-      var posts = ts.reduce(function (s, t) { return s + t.posts.length; }, 0);
-      return '<tr><td><button class="lnk" data-go="kategori" data-arg="' + f.id + '"><b>' + f.navn + '</b></button><br><span class="muted">' + f.om + '</span></td><td class="num">' + ts.length + '</td><td class="num">' + posts + "</td></tr>";
-    }).join("");
-    return h + "</table></div></div>";
-  };
-
-  V.kategori = function (id) {
-    var f = forum(id);
-    var ts = db.threads.filter(function (t) { return t.cat === id; }).sort(function (a, b) { return last(b).ts - last(a).ts; });
-    var h = flashHtml() + '<div class="small"><button class="lnk" data-go="forum">Forum</button> » ' + esc(f.navn) + "</div>";
-    h += '<div class="box"><div class="bh">' + esc(f.navn) + '</div><div class="bb"><div class="muted">' + esc(f.om) + "</div>" +
-      (ts.length ? '<table class="list"><tr><th>Tråd</th><th>Svar</th><th>Siste</th></tr>' + ts.map(threadRow).join("") + "</table>" : '<div class="muted">Ingen tråder her ennå.</div>') + "</div></div>";
-    if (me()) h += '<div class="box"><div class="bh">Ny tråd</div><div class="bb"><form class="form" data-form="thread" data-arg="' + id + '"><label>Tittel<input type="text" id="nt-title" name="title" maxlength="80" required></label><label>Innlegg<textarea id="nt-text" name="text" maxlength="3000" required></textarea></label><div class="row"><button class="btn" type="submit">Opprett tråd</button><span class="muted">+10 poeng</span></div></form></div></div>';
-    return h;
-  };
-
-  V.trad = function (id) {
-    var t = db.threads.filter(function (x) { return x.id === id; })[0];
-    if (!t) return V.forum();
-    var f = forum(t.cat);
-    var h = '<div class="small"><button class="lnk" data-go="forum">Forum</button> » <button class="lnk" data-go="kategori" data-arg="' + f.id + '">' + esc(f.navn) + "</button> » " + esc(t.title) + "</div>";
-    h += '<div class="box"><div class="bh">' + esc(t.title) + '</div><div class="bb">' + t.posts.map(function (p) {
-      var u = user(p.author);
-      return '<div class="post"><div class="pa">' + av(p.author) + "<div>" + ulink(p.author) + '<div class="muted">' + (u ? u.points + " poeng" : "") + '</div></div></div><div class="pt"><div class="muted" style="white-space:normal">' + when(p.ts) + "</div>" + esc(p.text) + "</div></div>";
-    }).join("") + "</div></div>";
-    if (me()) h += '<div class="box"><div class="bh">Svar</div><div class="bb"><form class="form" data-form="reply" data-arg="' + t.id + '"><textarea id="rp-text" name="text" aria-label="Svar" maxlength="3000" required></textarea><div class="row"><button class="btn" type="submit">Send svar</button><span class="muted">+5 poeng</span></div></form></div></div>';
-    return h;
-  };
-
-  V.meldinger = function () {
-    var m = me(); if (!m) return needLogin("Meldinger");
-    var inbox = db.msgs.filter(function (x) { return x.to === m.name; }).sort(function (a, b) { return b.ts - a.ts; });
-    var sent = db.msgs.filter(function (x) { return x.from === m.name; }).sort(function (a, b) { return b.ts - a.ts; });
-    function tbl(list, who) {
-      if (!list.length) return '<div class="muted">Ingen meldinger.</div>';
-      return '<table class="list"><tr><th>' + (who === "from" ? "Fra" : "Til") + "</th><th>Emne</th><th>Tid</th></tr>" + list.map(function (x) {
-        return '<tr class="' + (who === "from" && !x.read ? "unread" : "") + '"><td>' + ulink(x[who]) + '</td><td><button class="lnk" data-go="melding" data-arg="' + x.id + '">' + esc(x.subject || "(uten emne)") + '</button></td><td class="small">' + when(x.ts) + "</td></tr>";
-      }).join("") + "</table>";
-    }
-    return flashHtml() + '<div class="row"><button class="btn" data-go="skriv">Ny melding</button></div>' +
-      '<div class="box"><div class="bh">Innboks</div><div class="bb">' + tbl(inbox, "from") + "</div></div>" +
-      '<div class="box"><div class="bh">Sendt</div><div class="bb">' + tbl(sent, "to") + "</div></div>";
-  };
-
-  V.melding = function (id) {
-    var m = me(); if (!m) return needLogin("Meldinger");
-    var x = db.msgs.filter(function (y) { return y.id === id; })[0];
-    if (!x) return V.meldinger();
-    if (x.to === m.name && !x.read) { x.read = true; save(); renderTabs(); }
-    var other = x.from === m.name ? x.to : x.from;
-    return '<div class="small"><button class="lnk" data-go="meldinger">Meldinger</button> » ' + esc(x.subject || "(uten emne)") + "</div>" +
-      '<div class="box"><div class="bh">' + esc(x.subject || "(uten emne)") + '</div><div class="bb"><div class="uline">' + av(x.from) + "<div>Fra " + ulink(x.from) + " til " + ulink(x.to) + '<div class="muted">' + when(x.ts) + '</div></div></div><div style="overflow-wrap:anywhere">' + nl2br(x.text) + '</div><div class="row"><button class="btn" data-go="skriv" data-arg="' + esc(other) + '" data-subj="' + esc("SV: " + (x.subject || "").replace(/^SV: /, "")) + '">Svar</button></div></div></div>';
-  };
-
-  V.skriv = function (to) {
-    var m = me(); if (!m) return needLogin("Ny melding");
-    var others = Object.keys(db.users).filter(function (n) { return n !== m.name; }).sort();
-    return '<div class="box"><div class="bh">Ny melding</div><div class="bb"><form class="form" data-form="msg">' +
-      '<label>Til<select id="ms-to" name="to">' + others.map(function (n) { return '<option' + (n === to ? " selected" : "") + ">" + esc(n) + "</option>"; }).join("") + "</select></label>" +
-      '<label>Emne<input type="text" id="ms-subj" name="subject" maxlength="80" value="' + esc(view.subj || "") + '"></label>' +
-      '<label>Melding<textarea id="ms-text" name="text" maxlength="3000" required></textarea></label>' +
-      '<div class="row"><button class="btn" type="submit">Send</button><button class="btn grey" type="button" data-go="meldinger">Avbryt</button></div></form></div></div>';
-  };
-
-  V.bydeler = function () {
-    return '<div class="box"><div class="bh">Bydeler i Nettby</div><div class="bb"><div class="grid2">' + BYDELER.map(function (b) {
-      var n = Object.keys(db.users).filter(function (u) { return db.users[u].bydel === b.id; }).length;
-      return '<div class="card"><button class="lnk" data-go="bydel" data-arg="' + b.id + '"><b>' + b.navn + '</b></button><div class="small">' + b.om + '</div><div class="muted">' + n + " innbyggere</div></div>";
-    }).join("") + "</div></div></div>";
-  };
-
-  V.bydel = function (id) {
-    var b = bydel(id);
-    var res = Object.keys(db.users).filter(function (u) { return db.users[u].bydel === b.id; });
-    return '<div class="small"><button class="lnk" data-go="bydeler">Bydeler</button> » ' + esc(b.navn) + "</div>" +
-      '<div class="box"><div class="bh"><span>' + esc(b.navn) + "</span><span>" + res.length + ' innbyggere</span></div><div class="bb"><div class="muted">' + esc(b.om) + "</div>" + userGrid(res) + "</div></div>";
-  };
-
-  function userGrid(list) {
-    if (!list.length) return '<div class="muted">Ingen funnet.</div>';
-    return '<div class="grid2">' + list.map(function (n) {
-      var u = user(n);
-      return '<div class="card"><div class="uline">' + av(n) + "<div>" + ulink(n) + '<div class="muted">' + esc(u.age) + " år, " + esc(u.city) + "</div></div></div>" + (u.status ? '<div class="small" style="font-style:italic;overflow-wrap:anywhere">«' + esc(u.status) + "»</div>" : "") + "</div>";
-    }).join("") + "</div>";
+  function lastAct(g) { var t = 0; g.threads.forEach(function (x) { var l = x.posts[x.posts.length - 1]; if (l.ts > t) t = l.ts; }); return t; }
+  function newsItem(n) {
+    var g = n.group ? byId(db.groups, n.group) : null, u = user(n.author);
+    return '<div class="news"><h2><button class="lnk" data-go="artikkel" data-arg="' + n.id + '">' + esc(n.title) + '</button></h2><div class="pic" style="background:' + esc(n.color || "#777") + '">' + esc(n.cat) + "</div>" +
+      '<div class="muted">' + esc(n.cat) + " – " + when(n.ts) + " av " + (u ? ulink(n.author) : esc(n.author)) + " Lest " + n.reads + "</div><div>" + esc(n.text.length > 180 ? n.text.slice(0, 180) + "…" : n.text) + "</div>" +
+      '<div class="acts small"><button class="lnk" data-go="artikkel" data-arg="' + n.id + '">' + ic("check") + "<b>Les mer</b></button>" + '<button class="lnk" data-go="artikkel" data-arg="' + n.id + '">' + ic("talk") + "Diskuter (" + n.comments.length + ")</button>" +
+      (g ? '<button class="lnk" data-go="gruppe" data-arg="' + g.id + '">' + ic("chain") + esc(g.name) + "</button>" : "") + "</div></div>";
   }
 
-  V.sok = function (q) {
-    q = q || "";
-    var res = q ? Object.keys(db.users).filter(function (n) {
-      var u = db.users[n], s = q.toLowerCase();
-      return n.toLowerCase().indexOf(s) !== -1 || String(u.city).toLowerCase().indexOf(s) !== -1;
-    }) : [];
-    return '<div class="box"><div class="bh">Søk etter innbyggere</div><div class="bb"><form class="row" data-form="search"><input type="text" id="sk-q" name="q" aria-label="Brukernavn eller bosted" placeholder="Brukernavn eller bosted" value="' + esc(q) + '" style="flex:1;min-width:0"><button class="btn" type="submit">Søk</button></form>' +
-      (q ? '<div class="muted">' + res.length + " treff på «" + esc(q) + "»</div>" + userGrid(res) : '<div class="muted">Prøv for eksempel «Bergen» eller «sara».</div>') + "</div></div>";
+  V.artikkel = function () {
+    var n = byId(db.news, view.arg); if (!n) return V.nyheter();
+    if (!view.counted) { n.reads++; view.counted = true; save(); }
+    var h = flashHtml() + '<div class="box plain"><div class="bh">' + esc(n.title) + '</div><div class="bb"><div class="muted">' + esc(n.cat) + " – " + when(n.ts) + " av " + ulink(n.author) + " · Lest " + n.reads + '</div><div class="wrap">' + nl2br(n.text) + "</div></div></div>";
+    h += '<div class="box"><div class="bh">Diskuter</div><div class="bb">' + (n.comments.length ? n.comments.map(postHtml).join("") : '<div class="muted">Ingen kommentarer ennå.</div>') +
+      (me() ? '<form class="form" data-form="comment" data-arg="' + n.id + '"><textarea id="cm-text" name="text" aria-label="Kommentar" maxlength="2000" required></textarea><div class="row"><button class="btn go" type="submit">Send kommentar</button></div></form>' : "") + "</div></div>";
+    return cols("one", [h]);
   };
 
-  V.registrer = function () {
-    if (me()) return V.house(db.me);
-    return '<div class="box"><div class="bh">Flytt inn i Nettby</div><div class="bb"><form class="form" data-form="register">' +
-      '<label>Brukernavn (3–20 tegn)<input type="text" id="rg-user" name="user" maxlength="20" required autocomplete="username"></label>' +
-      '<label>Passord<input type="password" id="rg-pass" name="pass" required autocomplete="new-password"></label>' +
-      '<label>Alder<input type="number" id="rg-age" name="age" min="10" max="99" value="15"></label>' +
-      '<label>Bosted<input type="text" id="rg-city" name="city" maxlength="40" value="Oslo"></label>' +
-      '<label>Velg bydel<select id="rg-bydel" name="bydel">' + BYDELER.map(function (b) { return '<option value="' + b.id + '">' + b.navn + "</option>"; }).join("") + "</select></label>" +
-      '<div class="err" id="rg-err"></div><div class="row"><button class="btn" type="submit">Flytt inn!</button></div>' +
-      '<div class="muted">Kontoen lagres bare i denne nettleseren. Ikke bruk et ekte passord.</div></form></div></div>';
+  V.skrivnyhet = function () {
+    if (!me()) return needLogin();
+    return cols("one", ['<div class="box"><div class="bh">Skriv en nyhet</div><div class="bb"><form class="form" data-form="news"><label>Kategori<select id="nw-cat" name="cat">' + NEWSCATS.slice(1).map(function (c) { return "<option>" + c + "</option>"; }).join("") +
+      '</select></label><label>Overskrift<input type="text" id="nw-title" name="title" maxlength="80" required></label><label>Tekst<textarea id="nw-text" name="text" maxlength="4000" required></textarea></label><div class="row"><button class="btn go" type="submit">Publiser</button></div></form></div></div>']);
   };
+
+  // --- profil ---
+  V.profil = function () {
+    var name = view.arg || db.me, u = user(name);
+    if (!u) return cols("one", ['<div class="box"><div class="bh">Fant ikke borgeren</div><div class="bb">Ingen borger med det navnet bor i Nettby.</div></div>']);
+    var m = me(), own = m && m.name === name, tab = view.tab || "profil";
+    if (!own && !view.counted) {
+      view.counted = true; u.visits++;
+      if (m && !u.npc) { u.log.unshift({ who: m.name, ts: Date.now() }); notify(name, m.name + " besøkte profilen din.", "profil", m.name); }
+      save();
+    }
+    var inner = (PV[tab] || PV.profil)(u, own, m);
+    return flashHtml() + '<div class="prof" style="--pbg:' + esc(u.bg) + ";--pfg:" + esc(u.fg) + '">' + inner + "</div>";
+  };
+  var PV = {};
+  function profHead(u, own, m) {
+    var rk = rank(u.points), pct = rk.next ? Math.min(100, Math.round((u.points - rk.from) / (rk.next - rk.from) * 100)) : 100;
+    var isFriend = m && m.friends.indexOf(u.name) !== -1, pending = m && u.requests.indexOf(m.name) !== -1;
+    var buttons = own ? '<button class="btn" data-go="innstillinger">Rediger profil</button>' : m ? (isFriend ? '<span class="small">' + ic("check") + " Dere er venner</span>" : pending ? '<span class="small">Venneforespørsel sendt</span>' : '<button class="btn go" data-act="addfriend" data-arg="' + esc(u.name) + '">Bli venner</button>') +
+      '<button class="btn" data-go="skriv" data-arg="' + esc(u.name) + '">Send melding</button><button class="btn" data-go="profil" data-arg="' + esc(u.name) + '" data-tab="gjestebok">Skriv i gjestebok</button>' : "";
+    var left = '<div class="stack">' + '<span class="photo">' + portrait(u.name) + "</span>" +
+      '<div class="row small" style="justify-content:space-between">' + (own ? '<button class="lnk" data-go="profil" data-arg="' + esc(u.name) + '" data-tab="bilder">' + ic("pic") + " Bytt profilbilde</button>" : "<span></span>") + (isOnline(u.name) ? '<span><span class="dot"></span> Pålogget</span>' : '<span class="muted">Ikke pålogget</span>') + "</div>" +
+      '<div class="small"><b>Aktivitet</b><br>Poeng i dag (' + (u.today.day === today() ? u.today.pts : 0) + "/" + DAILY + ")<br>Poeng totalt (" + u.points + "/" + (rk.next || u.points) + ")<br>Besøk: " + u.visits + "<br>Borger siden " + dateOnly(u.joined) + "</div></div>";
+    var mid = '<div class="stack"><div class="pname">' + smiley(u.mood, 44) + '<div><h1>' + esc(u.name) + " " + u.age + " " + (u.gender === "f" ? "♀" : "♂") + (u.max ? ' <span class="maxbadge">MAX</span>' : "") + '</h1><div><button class="lnk" data-go="bydel" data-arg="' + esc(u.city + "|" + u.bydel) + '">' + esc(u.city) + "</button>, " +
+      '<button class="lnk" data-go="bydel" data-arg="' + esc(u.city + "|" + u.bydel) + '">' + esc(u.bydel) + "</button></div></div></div>" +
+      (u.status ? '<div class="small"><i>«' + esc(u.status) + "»</i></div>" : "") + '<div class="row">' + buttons + "</div>";
+    var right = '<div class="stack"><div class="rank"><div class="bar"><i style="width:' + pct + '%"></i></div><u>' + rk.name + '</u></div><div class="gadget" aria-hidden="true"><div class="globe"></div><div id="gclock"></div><div>NETTBY-TID</div></div></div>';
+    return { left: left, mid: mid, right: right };
+  }
+  function frame(u, own, m, body) { var p = profHead(u, own, m); return p.left + p.mid + body + "</div>" + p.right; }
+
+  PV.profil = function (u, own, m) {
+    var body = '<div class="about">' + (u.about ? nl2br(u.about) : own ? '<span class="muted">Du har ikke skrevet noe om deg selv ennå. Gå til <button class="lnk" data-go="innstillinger">Innstillinger</button>.</span>' : "Hei, jeg har ikke skrevet så mye om meg selv ennå :-)") + "</div>";
+    var gbs = db.gb.filter(function (g) { return g.to === u.name; }).sort(function (a, b) { return b.ts - a.ts; }).slice(0, 3);
+    if (gbs.length) body += '<h3 style="font-size:14px;margin-top:8px">Siste i gjesteboka</h3><div class="gb">' + gbs.map(function (g) { return gbEntry(g, false, m); }).join("") + '</div><button class="lnk small" data-go="profil" data-arg="' + esc(u.name) + '" data-tab="gjestebok">Se hele gjesteboka</button>';
+    return frame(u, own, m, body);
+  };
+  function gbEntry(g, own, m) {
+    var canDel = m && (own || g.from === m.name);
+    return '<div class="entry">' + ph(g.from) + '<div class="t"><b>' + ulink(g.from, true) + "</b> " + (user(g.from) ? user(g.from).age + sym(user(g.from)) : "") + ' <span class="small" style="opacity:.75">' + when(g.ts) + "</span>" +
+      (m && own && g.from !== m.name ? ' · <button class="lnk small" data-go="profil" data-arg="' + esc(g.from) + '" data-tab="gjestebok">Svar</button>' : "") +
+      (canDel ? ' · <button class="lnk small" data-act="delgb" data-arg="' + g.id + '">Slett</button>' : "") + "<br>" + nl2br(g.text) + "</div></div>";
+  }
+  function wide(title, html) { return '<div class="pwide"><h3>' + title + "</h3>" + html + "</div>"; }
+  function tabPage(u, own, m, title, html) { var p = profHead(u, own, m); return p.left + p.mid + "</div>" + p.right + wide(title, html); }
+
+  PV.gjestebok = function (u, own, m) {
+    var list = db.gb.filter(function (g) { return g.to === u.name; }).sort(function (a, b) { return b.ts - a.ts; });
+    var h = (m ? '<form class="form" data-form="gb" data-arg="' + esc(u.name) + '"><label>Skriv i ' + (own ? "din egen" : esc(u.name) + "s") + ' gjestebok<textarea id="gb-text" name="text" maxlength="1000" required></textarea></label><div class="row"><button class="btn go" type="submit">Skriv innlegg</button></div></form>' : "") +
+      '<div class="gb">' + (list.length ? list.map(function (g) { return gbEntry(g, own, m); }).join("") : "<div>Gjesteboka er tom. Bli den første til å skrive!</div>") + "</div>";
+    return tabPage(u, own, m, "Gjestebok (" + list.length + ")", h);
+  };
+  PV.dagbok = function (u, own) {
+    var list = u.diary.slice().sort(function (a, b) { return b.ts - a.ts; });
+    var h = (own ? '<form class="form" data-form="diary"><label>Tittel<input type="text" id="db-title" name="title" maxlength="80" required></label><label>Hva skjedde i dag?<textarea id="db-text" name="text" maxlength="5000" required></textarea></label><div class="row"><button class="btn go" type="submit">Skriv i dagboka</button></div></form>' : "") +
+      (list.length ? list.map(function (d) { return '<div class="stack" style="border-bottom:1px dotted;padding-bottom:8px"><b style="font-size:14px">' + esc(d.title) + '</b><span class="small" style="opacity:.75">' + when(d.ts) + (own ? ' · <button class="lnk" data-act="deldiary" data-arg="' + d.id + '">Slett</button>' : "") + '</span><div class="wrap">' + nl2br(d.text) + "</div></div>"; }).join("") : "<div>Ingen dagbokinnlegg ennå.</div>");
+    return tabPage(u, own, me(), "Dagbok", h);
+  };
+  PV.grupper = function (u, own) {
+    var gs = db.groups.filter(function (g) { return g.members.indexOf(u.name) !== -1; });
+    var h = gs.length ? gs.map(function (g) { return '<div class="grp">' + ic("chain") + '<div><button class="lnk" data-go="gruppe" data-arg="' + g.id + '"><b>' + esc(g.name) + '</b></button><div class="small">' + g.members.length + " medlemmer</div></div></div>"; }).join("") : "<div>Ikke medlem av noen grupper ennå." + (own ? ' <button class="lnk" data-go="grupper">Finn grupper</button>' : "") + "</div>";
+    return tabPage(u, own, me(), "Grupper", h);
+  };
+  PV.kalender = function (u, own) {
+    var list = u.events.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+    var h = (own ? '<form class="row" data-form="event"><input type="date" id="ev-date" name="date" aria-label="Dato" required style="width:auto"><input type="text" id="ev-title" name="title" aria-label="Hva skjer?" placeholder="Hva skjer?" maxlength="80" required style="flex:1;min-width:140px"><button class="btn go" type="submit">Legg til</button></form>' : "") +
+      (list.length ? '<table class="list"><tr><th>Dato</th><th>Hva</th></tr>' + list.map(function (e) { var d = new Date(e.date + "T12:00"); return '<tr><td class="num">' + DAGER[d.getDay()] + " " + d.getDate() + ". " + MND[d.getMonth()] + "</td><td>" + esc(e.title) + (own ? ' · <button class="lnk" data-act="delevent" data-arg="' + e.id + '">Slett</button>' : "") + "</td></tr>"; }).join("") + "</table>" : "<div>Ingen avtaler i kalenderen.</div>");
+    return tabPage(u, own, me(), "Kalender", h);
+  };
+  PV.venner = function (u, own) {
+    var h = "";
+    if (own && u.requests.length) h += '<div class="stack"><b>Venneforespørsler</b>' + u.requests.map(function (r) { return '<div class="row">' + ulink(r, true) + ' vil bli venn med deg <button class="btn go" data-act="accept" data-arg="' + esc(r) + '">Godta</button><button class="btn" data-act="decline" data-arg="' + esc(r) + '">Avslå</button></div>'; }).join("") + "</div>";
+    h += u.friends.length ? '<div class="faces">' + u.friends.map(faceHtml).join("") + "</div>" : "<div>Ingen venner ennå." + (own ? ' Finn noen under <button class="lnk" data-go="finn">Finn borger</button>!' : "") + "</div>";
+    return tabPage(u, own, me(), "Venner (" + u.friends.length + ")", h);
+  };
+  PV.bilder = function (u, own) {
+    var h = (own ? '<form class="row" data-form="photo"><input type="file" id="ph-file" name="file" accept="image/*" aria-label="Velg bilde" required><input type="text" id="ph-cap" name="caption" placeholder="Bildetekst" aria-label="Bildetekst" maxlength="80" style="flex:1;min-width:120px"><label class="row" style="flex-direction:row;font-size:11px"><input type="checkbox" id="ph-prof" name="asprofile" checked> Bruk som profilbilde</label><button class="btn go" type="submit">Last opp</button></form><div class="small" style="opacity:.75">Bildene blir lagret i nettleseren din.</div>' : "") +
+      (u.photos.length ? '<div class="photos">' + u.photos.map(function (p) { return '<figure><img src="' + esc(p.src) + '" alt="' + esc(p.caption || "Bilde") + '"><figcaption>' + esc(p.caption) + (own ? '<br><button class="lnk" data-act="setprofile" data-arg="' + p.id + '">Bruk som profilbilde</button> · <button class="lnk" data-act="delphoto" data-arg="' + p.id + '">Slett</button>' : "") + "</figcaption></figure>"; }).join("") + "</div>" : "<div>Ingen bilder lastet opp ennå.</div>");
+    return tabPage(u, own, me(), "Bilder", h);
+  };
+  PV.linker = function (u, own) {
+    var h = (own ? '<form class="row" data-form="link"><input type="text" id="lk-title" name="title" placeholder="Navn" aria-label="Navn på lenke" maxlength="60" required style="flex:1;min-width:120px"><input type="url" id="lk-url" name="url" placeholder="https://" aria-label="Adresse" required style="flex:2;min-width:160px"><button class="btn go" type="submit">Legg til</button></form>' : "") +
+      (u.links.length ? u.links.map(function (l) { return '<div class="row">' + ic("link") + '<a href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(l.title) + '</a> <span class="small" style="opacity:.7">' + esc(l.url) + "</span>" + (own ? ' <button class="lnk small" data-act="dellink" data-arg="' + l.id + '">Slett</button>' : "") + "</div>"; }).join("") : "<div>Ingen linker ennå.</div>");
+    return tabPage(u, own, me(), "Linker", h);
+  };
+
+  function faceHtml(n) { var u = user(n); return '<div class="face"><button class="lnk" data-go="profil" data-arg="' + esc(n) + '" aria-label="' + esc(n) + '">' + ph(n) + "</button><div>" + ulink(n, true) + "</div><div>" + u.age + sym(u) + " " + (isOnline(n) ? '<span class="dot" title="Pålogget"></span>' : "") + "</div></div>"; }
+  function postHtml(p) { var u = user(p.author); return '<div class="post"><div class="pa">' + ph(p.author) + "<div>" + ulink(p.author) + "</div>" + (u ? '<div class="muted">' + rank(u.points).name + "</div>" : "") + '</div><div class="pt"><div class="muted" style="white-space:normal">' + when(p.ts) + "</div>" + esc(p.text) + "</div></div>"; }
+
+  // --- finn borger ---
+  V.finn = function () {
+    var q = view.q || {}, res = Object.keys(db.users).filter(function (n) {
+      var u = db.users[n];
+      if (q.name && n.toLowerCase().indexOf(q.name.toLowerCase()) === -1) return false;
+      if (q.gender && u.gender !== q.gender) return false;
+      if (q.min && u.age < +q.min) return false;
+      if (q.max && u.age > +q.max) return false;
+      if (q.city && u.city !== q.city) return false;
+      if (q.online && !isOnline(n)) return false;
+      return true;
+    });
+    var form = '<form class="form" data-form="finn"><div class="row"><label style="flex:2;min-width:140px">Brukernavn<input type="text" id="fn-name" name="name" value="' + esc(q.name || "") + '"></label>' +
+      '<label>Kjønn<select id="fn-g" name="gender"><option value="">Alle</option><option value="f"' + (q.gender === "f" ? " selected" : "") + '>Jenter</option><option value="m"' + (q.gender === "m" ? " selected" : "") + ">Gutter</option></select></label>" +
+      '<label>Alder fra<input type="number" id="fn-min" name="min" min="10" max="99" value="' + esc(q.min || "") + '" style="width:60px"></label><label>til<input type="number" id="fn-max" name="max" min="10" max="99" value="' + esc(q.max || "") + '" style="width:60px"></label>' +
+      '<label>Sted<select id="fn-city" name="city"><option value="">Hele Norge</option>' + Object.keys(STEDER).map(function (c) { return "<option" + (q.city === c ? " selected" : "") + ">" + c + "</option>"; }).join("") + "</select></label>" +
+      '<label class="row" style="flex-direction:row;align-self:flex-end"><input type="checkbox" id="fn-on" name="online"' + (q.online ? " checked" : "") + "> Bare pålogget</label></div><div class=\"row\"><button class=\"btn go\" type=\"submit\">Finn borger</button></div></form>";
+    return cols("one", ['<div class="box"><div class="bh">Finn borger</div><div class="bb">' + form + '<div class="muted">' + res.length + ' borgere funnet</div><div class="faces">' + res.map(faceHtml).join("") + "</div></div></div>"]);
+  };
+
+  V.ansikter = function () {
+    var list = Object.keys(db.users).sort(function () { return Math.random() - .5; });
+    return cols("one", ['<div class="box"><div class="bh">Ansikter</div><div class="bb"><div class="muted">Tilfeldige ansikter fra Nettby. Klikk for å besøke.</div><div class="faces">' + list.map(faceHtml).join("") + '</div><div class="row"><button class="btn" data-go="ansikter">Vis nye ansikter</button></div></div></div>']);
+  };
+
+  // --- grupper ---
+  V.grupper = function () {
+    var m = me(), list = db.groups.filter(function (g) { return !view.mine || (m && g.members.indexOf(m.name) !== -1); }).sort(function (a, b) { return b.members.length - a.members.length; });
+    return flashHtml() + cols("one", ['<div class="box"><div class="bh">' + (view.mine ? "Mine grupper" : "Alle grupper") + '</div><div class="bb"><table class="list"><tr><th>Gruppe</th><th>Medlemmer</th><th>Debatter</th></tr>' +
+      list.map(function (g) { return '<tr><td><div class="grp">' + ic("chain") + '<div><button class="lnk" data-go="gruppe" data-arg="' + g.id + '"><b>' + esc(g.name) + '</b></button><div class="muted">' + esc(g.desc) + '</div></div></div></td><td class="num">' + g.members.length + '</td><td class="num">' + g.threads.length + "</td></tr>"; }).join("") +
+      "</table>" + (list.length ? "" : '<div class="muted">Du er ikke med i noen grupper ennå.</div>') + "</div></div>"]);
+  };
+  V.nygruppe = function () {
+    if (!me()) return needLogin();
+    return cols("one", ['<div class="box"><div class="bh">Opprett gruppe</div><div class="bb"><form class="form" data-form="group"><label>Navn på gruppa<input type="text" id="gr-name" name="name" maxlength="60" required></label><label>Beskrivelse<textarea id="gr-desc" name="desc" maxlength="500"></textarea></label><div class="row"><button class="btn go" type="submit">Opprett gruppe</button></div></form></div></div>']);
+  };
+  V.gruppe = function () {
+    var g = byId(db.groups, view.arg); if (!g) return V.grupper();
+    var m = me(), member = m && g.members.indexOf(m.name) !== -1;
+    var main = flashHtml() + '<div class="box"><div class="bh">' + esc(g.name) + '</div><div class="bb"><div class="wrap">' + esc(g.desc) + '</div><div class="muted">Opprettet av ' + ulink(g.owner, true) + " · " + g.members.length + " medlemmer</div>" +
+      (m ? '<div class="row">' + (member ? '<button class="btn" data-act="leave" data-arg="' + g.id + '">Meld deg ut</button>' : '<button class="btn go" data-act="join" data-arg="' + g.id + '">Bli medlem</button>') + "</div>" : "") + "</div></div>";
+    main += '<div class="box"><div class="bh">Debatter</div><div class="bb">' + (g.threads.length ? '<table class="list"><tr><th>Debatt</th><th>Svar</th><th>Siste</th></tr>' + g.threads.slice().sort(function (a, b) { return b.posts[b.posts.length - 1].ts - a.posts[a.posts.length - 1].ts; }).map(function (t) {
+      var l = t.posts[t.posts.length - 1];
+      return '<tr><td><button class="lnk" data-go="trad" data-arg="' + g.id + "|" + t.id + '"><b>' + esc(t.title) + '</b></button><div class="muted">av ' + esc(t.author) + '</div></td><td class="num">' + (t.posts.length - 1) + '</td><td class="small">' + when(l.ts) + "<br>av " + esc(l.author) + "</td></tr>";
+    }).join("") + "</table>" : '<div class="muted">Ingen debatter ennå.</div>') +
+      (member ? '<form class="form" data-form="thread" data-arg="' + g.id + '"><b>Start en ny debatt</b><label>Tittel<input type="text" id="th-title" name="title" maxlength="80" required></label><label>Innlegg<textarea id="th-text" name="text" maxlength="3000" required></textarea></label><div class="row"><button class="btn go" type="submit">Start debatt</button></div></form>' : m ? '<div class="muted">Bli medlem for å starte en debatt.</div>' : "") + "</div></div>";
+    var side = '<div class="box g"><div class="bh">Medlemmer</div><div class="bb ulist small">' + g.members.map(function (n) { return "<div>" + ulink(n) + "</div>"; }).join("") + "</div></div>";
+    return cols("two", [main, side]);
+  };
+  V.trad = function () {
+    var p = String(view.arg).split("|"), g = byId(db.groups, p[0]), t = g && byId(g.threads, p[1]);
+    if (!t) return V.grupper();
+    var m = me(), member = m && g.members.indexOf(m.name) !== -1;
+    return cols("one", ['<div class="small"><button class="lnk" data-go="grupper">Grupper</button> » <button class="lnk" data-go="gruppe" data-arg="' + g.id + '">' + esc(g.name) + "</button> » " + esc(t.title) + "</div>" +
+      '<div class="box"><div class="bh">' + esc(t.title) + '</div><div class="bb">' + t.posts.map(postHtml).join("") +
+      (member ? '<form class="form" data-form="reply" data-arg="' + g.id + "|" + t.id + '"><textarea id="rp-text" name="text" aria-label="Svar" maxlength="3000" required></textarea><div class="row"><button class="btn go" type="submit">Svar</button></div></form>' : m ? '<div class="row"><button class="btn go" data-act="join" data-arg="' + g.id + '">Bli medlem for å svare</button></div>' : "") + "</div></div>"]);
+  };
+  V.debatter = function () {
+    var m = me(); if (!m) return needLogin();
+    var rows = [];
+    db.groups.forEach(function (g) { if (g.members.indexOf(m.name) === -1) return; g.threads.forEach(function (t) { rows.push({ g: g, t: t, l: t.posts[t.posts.length - 1] }); }); });
+    rows.sort(function (a, b) { return b.l.ts - a.l.ts; });
+    return cols("one", ['<div class="box"><div class="bh">Debatter i gruppene dine</div><div class="bb">' + (rows.length ? '<table class="list"><tr><th>Debatt</th><th>Gruppe</th><th>Siste</th></tr>' + rows.map(function (r) {
+      return '<tr><td><button class="lnk" data-go="trad" data-arg="' + r.g.id + "|" + r.t.id + '"><b>' + esc(r.t.title) + "</b></button></td><td>" + esc(r.g.name) + '</td><td class="small">' + when(r.l.ts) + "</td></tr>";
+    }).join("") + "</table>" : '<div class="muted">Ingen debatter ennå. Bli med i en <button class="lnk" data-go="grupper">gruppe</button>.</div>') + "</div></div>"]);
+  };
+
+  // --- møt ---
+  V.mot = function () {
+    var m = me(); if (!m) return needLogin();
+    var cands = npcs().filter(function (n) { return n !== m.name && Math.abs(user(n).age - m.age) <= 4; });
+    if (!cands.length) cands = npcs();
+    var n = view.arg && user(view.arg) ? view.arg : pick(cands), u = user(n);
+    view.arg = n;
+    return flashHtml() + cols("one", ['<div class="box"><div class="bh">Møt</div><div class="bb"><div class="meet">' + ph(n) + '<div class="stack"><h2>' + esc(n) + " " + u.age + sym(u) + '</h2><div>' + esc(u.city) + ", " + esc(u.bydel) + '</div><div class="wrap">' + esc(u.about) + '</div><b>Vil du møte ' + esc(n) + '?</b><div class="row"><button class="btn go" data-act="meet" data-arg="' + esc(n) + '">Ja!</button><button class="btn" data-act="nomeet">Nei takk</button><button class="lnk" data-go="profil" data-arg="' + esc(n) + '">Se profilen</button></div><div class="muted">Sier begge ja, får dere beskjed om det.</div></div></div></div></div>']);
+  };
+
+  // --- oppslag ---
+  V.oppslag = function () {
+    var cat = view.arg, list = db.ads.filter(function (a) { return !cat || a.cat === cat; }).sort(function (a, b) { return b.ts - a.ts; });
+    var side = '<div class="box"><div class="bh">Kategorier</div><div class="bb small"><div>• <button class="lnk" data-go="oppslag">Alle</button> (' + db.ads.length + ")</div>" + OPPSLAG.map(function (c) { return '<div>• <button class="lnk" data-go="oppslag" data-arg="' + esc(c) + '">' + (c === cat ? "<b>" + esc(c) + "</b>" : esc(c)) + "</button> (" + db.ads.filter(function (a) { return a.cat === c; }).length + ")</div>"; }).join("") + "</div></div>";
+    var main = flashHtml() + '<div class="box"><div class="bh">Oppslagstavla' + (cat ? " – " + esc(cat) : "") + '</div><div class="bb">' + (list.length ? '<table class="list"><tr><th>Oppslag</th><th>Fra</th><th>Lagt inn</th></tr>' + list.map(function (a) {
+      return '<tr><td><b>' + esc(a.title) + '</b><div class="wrap">' + esc(a.text) + '</div><div class="muted">' + esc(a.cat) + (me() && a.author === db.me ? ' · <button class="lnk" data-act="delad" data-arg="' + a.id + '">Slett</button>' : "") + "</div></td><td>" + ulink(a.author, true) + '</td><td class="small">' + when(a.ts) + "</td></tr>";
+    }).join("") + "</table>" : '<div class="muted">Ingen oppslag her ennå.</div>') + "</div></div>";
+    if (me()) main += '<div class="box"><div class="bh">Nytt oppslag</div><div class="bb"><form class="form" data-form="ad"><label>Kategori<select id="ad-cat" name="cat">' + OPPSLAG.map(function (c) { return "<option" + (c === cat ? " selected" : "") + ">" + c + "</option>"; }).join("") + '</select></label><label>Overskrift<input type="text" id="ad-title" name="title" maxlength="80" required></label><label>Tekst<textarea id="ad-text" name="text" maxlength="1000" required></textarea></label><div class="row"><button class="btn go" type="submit">Heng opp</button></div></form></div></div>';
+    return cols("two", [main, side]);
+  };
+
+  // --- siste ---
+  V.siste = function () {
+    var ev = [];
+    db.gb.forEach(function (g) { ev.push({ ts: g.ts, html: ulink(g.from) + " skrev i gjesteboka til " + ulink(g.to) + ': <i class="wrap">«' + esc(g.text.slice(0, 80)) + "»</i>" }); });
+    Object.keys(db.users).forEach(function (n) {
+      var u = db.users[n];
+      u.diary.forEach(function (d) { ev.push({ ts: d.ts, html: ulink(n) + ' skrev i dagboka: <button class="lnk" data-go="profil" data-arg="' + esc(n) + '" data-tab="dagbok">' + esc(d.title) + "</button>" }); });
+      u.photos.forEach(function (p) { ev.push({ ts: p.ts, html: ulink(n) + ' la ut et nytt <button class="lnk" data-go="profil" data-arg="' + esc(n) + '" data-tab="bilder">bilde</button>' }); });
+      if (Date.now() - u.joined < 30 * DAY) ev.push({ ts: u.joined, html: ulink(n) + " flyttet inn i Nettby" });
+    });
+    db.groups.forEach(function (g) { g.threads.forEach(function (t) { t.posts.forEach(function (p, i) { ev.push({ ts: p.ts, html: ulink(p.author) + (i ? " svarte i " : " startet debatten ") + '<button class="lnk" data-go="trad" data-arg="' + g.id + "|" + t.id + '">' + esc(t.title) + "</button>" }); }); }); });
+    ev.sort(function (a, b) { return b.ts - a.ts; });
+    return cols("one", ['<div class="box"><div class="bh">Siste i Nettby</div><div class="bb"><table class="list">' + ev.slice(0, 40).map(function (e) { return '<tr><td class="small" style="white-space:nowrap">' + when(e.ts) + "</td><td>" + e.html + "</td></tr>"; }).join("") + "</table></div></div>"]);
+  };
+
+  // --- max ---
+  V.max = function () {
+    var m = me();
+    return flashHtml() + cols("one", ['<div class="box"><div class="bh">Nettby Max</div><div class="bb"><h2 style="font-size:22px">Bli Max-borger!</h2><div>Som Max-borger får du:</div><div class="stack small"><div>' + ic("check") + " Et MAX-merke ved navnet ditt overalt</div><div>" + ic("check") + " Plass på forsiden under «Siste med Nettby Max»</div><div>" + ic("check") + " Egen bakgrunnsfarge og tekstfarge på profilen</div><div>" + ic("check") + " Ubegrenset med bilder</div></div>" +
+      (m ? (m.max ? '<div><b>Du er Max-borger!</b></div><div class="row"><button class="btn" data-act="max">Avslutt Max</button></div>' : '<div class="row"><button class="btn go" data-act="max">Bli Max gratis</button></div><div class="muted">I denne replikaen er Max gratis.</div>') : "") + "</div></div>"]);
+  };
+
+  V.hjelp = function () {
+    var Q = [["Hvordan tjener jeg poeng?", "Du får poeng for å skrive i gjestebøker, dagbok, debatter og oppslag, og for å laste opp bilder. Du kan tjene maks " + DAILY + " poeng per dag."],
+      ["Hva betyr tittelen min?", "Tittelen viser hvor aktiv du har vært. Titlene er: " + RANKS.map(function (r) { return r[1] + " (" + r[0] + ")"; }).join(", ") + "."],
+      ["Hvordan bytter jeg profilbilde?", "Gå til Bilder på profilen din, last opp et bilde og huk av for «Bruk som profilbilde»."],
+      ["Kan vennene mine se det jeg skriver?", "Ikke ennå. Denne replikaen lagrer alt i din egen nettleser."],
+      ["Hvem er de andre borgerne?", "Alle de andre borgerne er oppdiktede. De svarer i gjestebøker, godtar venneforespørsler og svarer på meldinger."]];
+    return cols("one", ['<div class="box"><div class="bh">Hjelp</div><div class="bb">' + Q.map(function (q) { return "<div><b>" + esc(q[0]) + "</b><br>" + esc(q[1]) + "</div>"; }).join("") + "</div></div>"]);
+  };
+
+  V.bydel = function () {
+    var p = String(view.arg || "").split("|"), city = p[0], bd = p[1];
+    var res = Object.keys(db.users).filter(function (n) { return db.users[n].city === city && (!bd || db.users[n].bydel === bd); });
+    var others = (STEDER[city] || []).map(function (b) { return '<button class="lnk" data-go="bydel" data-arg="' + esc(city + "|" + b) + '">' + (b === bd ? "<b>" + esc(b) + "</b>" : esc(b)) + "</button>"; }).join(" · ");
+    return cols("one", ['<div class="box"><div class="bh">' + esc(city) + (bd ? ", " + esc(bd) : "") + '</div><div class="bb"><div class="small">Bydeler i ' + esc(city) + ': <button class="lnk" data-go="bydel" data-arg="' + esc(city) + '">Alle</button> · ' + others + '</div><div class="muted">' + res.length + ' borgere bor her</div><div class="faces">' + res.map(faceHtml).join("") + "</div></div></div>"]);
+  };
+
+  // --- egne sider ---
+  V.postkasse = function () {
+    var m = me(); if (!m) return needLogin();
+    var sent = !!view.sent;
+    var list = db.msgs.filter(function (x) { return sent ? x.from === m.name : x.to === m.name; }).sort(function (a, b) { return b.ts - a.ts; });
+    var who = sent ? "to" : "from";
+    return flashHtml() + cols("one", ['<div class="box"><div class="bh">' + (sent ? "Sendte meldinger" : "Innboks") + '</div><div class="bb">' + (list.length ? '<table class="list"><tr><th>' + (sent ? "Til" : "Fra") + "</th><th>Emne</th><th>Tid</th></tr>" + list.map(function (x) {
+      return '<tr class="' + (!sent && !x.read ? "unread" : "") + '"><td>' + ulink(x[who], true) + '</td><td><button class="lnk" data-go="melding" data-arg="' + x.id + '">' + esc(x.subject || "(uten emne)") + '</button></td><td class="small">' + when(x.ts) + "</td></tr>";
+    }).join("") + "</table>" : '<div class="muted">Postkassa er tom.</div>') + "</div></div>"]);
+  };
+  V.melding = function () {
+    var m = me(); if (!m) return needLogin();
+    var x = byId(db.msgs, view.arg); if (!x) return V.postkasse();
+    if (x.to === m.name && !x.read) { x.read = true; save(); }
+    var other = x.from === m.name ? x.to : x.from;
+    return cols("one", ['<div class="box"><div class="bh">' + esc(x.subject || "(uten emne)") + '</div><div class="bb"><div class="row">' + ph(x.from) + "<div>Fra " + ulink(x.from) + "<br>til " + ulink(x.to) + '<div class="muted">' + when(x.ts) + '</div></div></div><div class="wrap">' + nl2br(x.text) + '</div><div class="row"><button class="btn go" data-go="skriv" data-arg="' + esc(other) + '" data-subj="' + esc("SV: " + (x.subject || "").replace(/^SV: /, "")) + '">Svar</button></div></div></div>']).replace('<span class="ph ', '<span style="width:60px;height:70px;display:block" class="ph ');
+  };
+  V.skriv = function () {
+    var m = me(); if (!m) return needLogin();
+    var others = Object.keys(db.users).filter(function (n) { return n !== m.name; }).sort();
+    return cols("one", ['<div class="box"><div class="bh">Ny melding</div><div class="bb"><form class="form" data-form="msg"><label>Til<select id="ms-to" name="to">' + others.map(function (n) { return "<option" + (n === view.arg ? " selected" : "") + ">" + esc(n) + "</option>"; }).join("") + "</select></label>" +
+      '<label>Emne<input type="text" id="ms-subj" name="subject" maxlength="80" value="' + esc(view.subj || "") + '"></label><label>Melding<textarea id="ms-text" name="text" maxlength="3000" required></textarea></label><div class="row"><button class="btn go" type="submit">Send</button></div></form></div></div>']);
+  };
+  V.logg = function () {
+    var m = me(); if (!m) return needLogin();
+    return cols("one", ['<div class="box"><div class="bh">Logg – hvem har besøkt deg</div><div class="bb">' + (m.log.length ? '<table class="list"><tr><th>Borger</th><th>Tid</th></tr>' + m.log.slice(0, 50).map(function (l) { return "<tr><td>" + ulink(l.who) + '</td><td class="small">' + when(l.ts) + "</td></tr>"; }).join("") + "</table>" : '<div class="muted">Ingen har besøkt profilen din ennå. Skriv i noen gjestebøker, så kommer de!</div>') + "</div></div>"]);
+  };
+  V.varsler = function () {
+    var m = me(); if (!m) return needLogin();
+    var h = '<div class="box"><div class="bh">Varsler</div><div class="bb">' + (m.notes.length ? '<table class="list">' + m.notes.slice(0, 50).map(function (x) {
+      return '<tr class="' + (x.read ? "" : "unread") + '"><td>' + (x.go ? '<button class="lnk" data-go="' + esc(x.go) + '"' + (x.arg ? ' data-arg="' + esc(x.arg) + '"' : "") + ">" + esc(x.text) + "</button>" : esc(x.text)) + '</td><td class="small">' + when(x.ts) + "</td></tr>";
+    }).join("") + "</table>" : '<div class="muted">Ingen varsler.</div>') + "</div></div>";
+    m.notes.forEach(function (x) { x.read = true; }); save();
+    return cols("one", [h]);
+  };
+  V.status = function () {
+    var m = me(); if (!m) return needLogin();
+    return flashHtml() + cols("one", ['<div class="box"><div class="bh">Status</div><div class="bb"><form class="form" data-form="status"><label>Hva gjør du nå?<input type="text" id="st-text" name="status" maxlength="80" value="' + esc(m.status) + '"></label>' +
+      '<div class="small">Humør</div><div class="row">' + Object.keys(MOODS).map(function (k) { return '<label class="row" style="flex-direction:row;align-items:center"><input type="radio" name="mood" value="' + k + '"' + (m.mood === k ? " checked" : "") + ">" + smiley(k, 28) + MOODS[k] + "</label>"; }).join("") + '</div><div class="row"><button class="btn go" type="submit">Lagre status</button></div></form></div></div>']);
+  };
+  var PCOLORS = [["#000000", "#ffffff"], ["#ffffff", "#1c1c1c"], ["#1d3f6e", "#ffffff"], ["#4a0d2e", "#ffd6ec"], ["#ffd6ec", "#4a0d2e"], ["#0f3d1f", "#d9ffd0"], ["#2b2b2b", "#ffcc33"], ["#e9f6fd", "#103050"], ["#3b1f5c", "#e7d6ff"], ["#7a1010", "#fff2e0"]];
+  V.innstillinger = function () {
+    var m = me(); if (!m) return needLogin();
+    var cityOpts = Object.keys(STEDER).map(function (c) { return "<option" + (c === m.city ? " selected" : "") + ">" + c + "</option>"; }).join("");
+    var bdOpts = (STEDER[m.city] || []).map(function (b) { return "<option" + (b === m.bydel ? " selected" : "") + ">" + esc(b) + "</option>"; }).join("");
+    return flashHtml() + cols("one", ['<div class="box"><div class="bh">Innstillinger</div><div class="bb"><form class="form" data-form="settings">' +
+      '<label>Brukernavn<input type="text" id="se-name" name="name" maxlength="20" value="' + esc(m.name) + '" required></label>' +
+      '<div class="row"><label>Kjønn<select id="se-g" name="gender"><option value="f"' + (m.gender === "f" ? " selected" : "") + '>Jente ♀</option><option value="m"' + (m.gender === "m" ? " selected" : "") + ">Gutt ♂</option></select></label>" +
+      '<label>Alder<input type="number" id="se-age" name="age" min="10" max="99" value="' + m.age + '" style="width:70px"></label>' +
+      '<label>Sted<select id="se-city" name="city" data-act="citychange">' + cityOpts + '</select></label><label>Bydel<select id="se-bydel" name="bydel">' + bdOpts + "</select></label></div>" +
+      '<label>Om meg<textarea id="se-about" name="about" maxlength="3000">' + esc(m.about) + "</textarea></label>" +
+      '<label>Passord (valgfritt, brukes når du logger inn igjen)<input type="password" id="se-pass" name="pass" value="' + esc(m.pass) + '" autocomplete="new-password"></label>' +
+      '<div class="small">Farger på profilen</div><div class="swatches" role="radiogroup" aria-label="Farger på profilen">' + PCOLORS.map(function (c) { var on = c[0] === m.bg && c[1] === m.fg; return '<button type="button" role="radio" aria-checked="' + on + '" aria-label="Bakgrunn ' + c[0] + '" class="' + (on ? "on" : "") + '" style="background:linear-gradient(135deg,' + c[0] + " 60%," + c[1] + ' 60%)" data-act="pcolor" data-arg="' + c[0] + "," + c[1] + '"></button>'; }).join("") +
+      '</div><div class="row"><button class="btn go" type="submit">Lagre</button><button class="btn" type="button" data-go="profil" data-arg="' + esc(m.name) + '">Til profilen</button></div><div class="err" id="se-err"></div></form>' +
+      '<div class="muted">Vil du starte helt på nytt? <button class="lnk" data-act="reset">Nullstill Nettby</button></div></div></div>']);
+  };
+  V.flyttinn = function () {
+    return cols("one", ['<div class="box"><div class="bh">Flytt inn i Nettby</div><div class="bb"><form class="form" data-form="register"><label>Brukernavn<input type="text" id="rg-user" name="user" maxlength="20" required autocomplete="username"></label><label>Passord<input type="password" id="rg-pass" name="pass" required autocomplete="new-password"></label>' +
+      '<div class="row"><label>Kjønn<select id="rg-g" name="gender"><option value="f">Jente ♀</option><option value="m">Gutt ♂</option></select></label><label>Alder<input type="number" id="rg-age" name="age" min="10" max="99" value="15" style="width:70px"></label><label>Sted<select id="rg-city" name="city">' + Object.keys(STEDER).map(function (c) { return "<option>" + c + "</option>"; }).join("") + "</select></label></div>" +
+      '<div class="err" id="rg-err"></div><div class="row"><button class="btn go" type="submit">Flytt inn!</button></div><div class="muted">Kontoen lagres bare i denne nettleseren. Ikke bruk et ekte passord.</div></form></div></div>']);
+  };
+  V.loggut = function () { return cols("one", ['<div class="box"><div class="bh">Du er logget ut</div><div class="bb">Velkommen tilbake! Logg inn i boksen til høyre, eller <button class="lnk" data-go="nyheter">gå til forsiden</button>.</div></div>']); };
 
   // ---------- render ----------
   function render() {
-    renderTabs(); renderLeft(); renderRight();
-    var fn = V[view.name] || V.forside;
-    document.getElementById("main").innerHTML = fn(view.arg);
+    renderHead(); renderSub(); renderSide();
+    document.getElementById("main").innerHTML = (V[view.name] || V.nyheter)();
+    tick();
+  }
+  function go(v) { view = v; render(); window.scrollTo(0, 0); }
+
+  // ---------- endre brukernavn ----------
+  function renameUser(old, nw) {
+    var u = db.users[old]; delete db.users[old]; u.name = nw; db.users[nw] = u;
+    function r(x) { return x === old ? nw : x; }
+    Object.keys(db.users).forEach(function (n) { var x = db.users[n]; x.friends = x.friends.map(r); x.requests = x.requests.map(r); x.log.forEach(function (l) { l.who = r(l.who); }); });
+    db.gb.forEach(function (g) { g.to = r(g.to); g.from = r(g.from); });
+    db.msgs.forEach(function (m) { m.to = r(m.to); m.from = r(m.from); });
+    db.groups.forEach(function (g) { g.owner = r(g.owner); g.members = g.members.map(r); g.threads.forEach(function (t) { t.author = r(t.author); t.posts.forEach(function (p) { p.author = r(p.author); }); }); });
+    db.news.forEach(function (n) { n.author = r(n.author); n.comments.forEach(function (c) { c.author = r(c.author); }); });
+    db.ads.forEach(function (a) { a.author = r(a.author); });
+    if (db.me === old) db.me = nw;
   }
 
-  // ---------- handlinger ----------
-  function login(name) { db.me = name; online = online.filter(function (n) { return n !== name; }); save(); }
-
-  function createUser(name, pass, age, city, bd) {
-    db.users[name] = { name: name, pass: pass, age: age, city: city, bydel: bd, color: pick(COLORS), status: "ny i Nettby!", about: "",
-      points: 10, joined: Date.now(), friends: [], requests: [], visits: 0 };
-    // en hyggelig velkomst fra en nabo
-    var nb = Object.keys(db.users).filter(function (n) { return db.users[n].npc && db.users[n].bydel === bd; })[0] || "MSN_Maria";
-    db.gb.push({ id: uid(), to: name, from: nb, text: "Velkommen til " + bydel(bd).navn + "! :D Legg meg til som venn da", ts: Date.now() });
-    db.users[name].requests.push(nb);
-  }
-
-  var GB_REPLIES = ["hei!! takk for innlegget :D", "heihei <3 svar tilbake ;)", "haha du er så morsom xD", "takk for sist!! ses i morgen?", "kleeem til deg <33", "hei! kjenner vi hverandre? :P", "lol ja enig!!", "god natt da, snakkes i morgen :)"];
+  // ---------- NPC-er svarer ----------
+  var GB_REPLIES = ["hei!! takk for innlegget :D", "heihei <3 svar tilbake ;)", "haha du er så morsom xD", "takk for sist!! ses i morgen?", "kleeem til deg <33", "hei! kjenner vi hverandre? :P", "lol ja enig!!", "god natt da, snakkes i morgen :)", "hei du! fin profil :)"];
   var MSG_REPLIES = ["Hei! Takk for meldingen :) Hva skjer?", "haha, ja! Legg meg til på MSN, så snakkes vi der", "Hmm, la meg tenke på det... ;)", "Kult! Ses på skolen i morgen?", "Ja, jeg er med!"];
-  var FORUM_REPLIES = ["Enig!", "Hmm, ikke helt enig, men ok :P", "Endelig noen som sier det!", "+1", "haha dette er så sant", "Kan noen forklare litt mer?"];
+  var POST_REPLIES = ["Enig!", "Hmm, ikke helt enig, men ok :P", "Endelig noen som sier det!", "+1", "haha dette er så sant", "Kan noen forklare litt mer?"];
+  function typing() { var a = document.activeElement; return a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.value; }
+  function later(fn) { setTimeout(function () { fn(); save(); if (typing()) { renderSide(); renderHead(); } else render(); }, 2500 + Math.random() * 4000); }
 
-  function typing() { var a = document.activeElement; return a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName); }
-  function npcLater(fn) {
-    setTimeout(function () {
-      fn(); save();
-      if (typing()) { renderTabs(); return; }
-      render();
-    }, 2500 + Math.random() * 4000);
+  // ---------- skjema ----------
+  function readPhoto(file, cb) {
+    var r = new FileReader();
+    r.onload = function () {
+      var img = new Image();
+      img.onload = function () {
+        var max = 420, s = Math.min(1, max / Math.max(img.width, img.height));
+        var c = document.createElement("canvas"); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        cb(c.toDataURL("image/jpeg", 0.8));
+      };
+      img.onerror = function () { cb(null); };
+      img.src = r.result;
+    };
+    r.onerror = function () { cb(null); };
+    r.readAsDataURL(file);
   }
 
   function onSubmit(e) {
@@ -580,91 +914,173 @@ table.list tr.unread td { font-weight: bold; }
     function v(n) { return f[n] ? String(f[n].value).trim() : ""; }
 
     if (t === "login") {
-      var u = user(v("user"));
-      if (!u || u.pass !== v("pass")) { document.getElementById("li-err").textContent = "Feil brukernavn eller passord. Sjekk skrivemåten og prøv igjen."; return; }
-      login(u.name); flash = "Velkommen tilbake, " + u.name + "!"; go("forside");
+      var lu = user(v("user"));
+      if (!lu || lu.npc || lu.pass !== v("pass")) { document.getElementById("li-err").textContent = "Feil brukernavn eller passord. Sjekk skrivemåten og prøv igjen."; return; }
+      db.me = lu.name; save(); flash = "Velkommen tilbake, " + lu.name + "!"; go({ name: "profil", arg: lu.name });
     } else if (t === "register") {
-      var name = v("user"), err = "";
-      if (!/^[A-Za-z0-9_æøåÆØÅ-]{3,20}$/.test(name)) err = "Brukernavnet må være 3–20 tegn: bokstaver, tall, _ eller -.";
-      else if (db.users[name]) err = "Brukernavnet er opptatt. Velg et annet.";
-      else if (!v("pass")) err = "Skriv inn et passord.";
+      var nm = v("user"), err = "";
+      if (!/^[A-Za-z0-9_æøåÆØÅ.-]{3,20}$/.test(nm)) err = "Brukernavnet må være 3–20 tegn: bokstaver, tall, punktum, _ eller -.";
+      else if (db.users[nm]) err = "Brukernavnet er opptatt. Velg et annet.";
       if (err) { document.getElementById("rg-err").textContent = err; return; }
-      createUser(name, v("pass"), parseInt(v("age"), 10) || 15, v("city") || "Oslo", v("bydel"));
-      login(name); flash = "Gratulerer, du har flyttet inn! Du har fått et innlegg i gjesteboka."; go("house", name);
-    } else if (t === "gb" && m) {
-      var text = v("text"); if (!text) return;
-      db.gb.push({ id: uid(), to: arg, from: m.name, text: text, ts: Date.now() }); addPoints(5);
-      var target = user(arg);
-      if (target && target.npc) npcLater(function () { db.gb.push({ id: uid(), to: m.name, from: arg, text: pick(GB_REPLIES), ts: Date.now() }); flash = arg + " har svart i gjesteboka di!"; });
-      save(); flash = "Innlegget ble lagt inn."; go("house", arg);
-    } else if (t === "edit" && m) {
-      m.status = v("status"); m.age = parseInt(v("age"), 10) || m.age; m.city = v("city"); m.bydel = v("bydel"); m.about = f.about.value;
-      save(); flash = "Huset ditt er oppdatert."; go("house", m.name);
-    } else if (t === "thread" && m) {
-      var th = { id: uid(), cat: arg, title: v("title"), author: m.name, ts: Date.now(), posts: [{ author: m.name, text: v("text"), ts: Date.now() }] };
-      db.threads.push(th); addPoints(10);
-      npcLater(function () { var n = pick(online.length ? online : ["MSN_Maria"]); th.posts.push({ author: n, text: pick(FORUM_REPLIES), ts: Date.now() }); });
-      save(); go("trad", th.id);
-    } else if (t === "reply" && m) {
-      var tr = db.threads.filter(function (x) { return x.id === arg; })[0]; if (!tr) return;
-      tr.posts.push({ author: m.name, text: v("text"), ts: Date.now() }); addPoints(5); save(); go("trad", arg);
-    } else if (t === "msg" && m) {
+      createUser(nm, { pass: v("pass"), gender: v("gender"), age: parseInt(v("age"), 10) || 15, city: v("city") });
+      db.me = nm; save(); flash = "Gratulerer, du er nå borger av Nettby!"; go({ name: "profil", arg: nm });
+    } else if (!m) {
+      return;
+    } else if (t === "gb") {
+      db.gb.push({ id: uid(), to: arg, from: m.name, text: v("text"), ts: Date.now() }); addPoints(1);
+      var tu = user(arg);
+      if (tu && tu.npc && arg !== m.name) later(function () { db.gb.push({ id: uid(), to: m.name, from: arg, text: pick(GB_REPLIES), ts: Date.now() }); m.log.unshift({ who: arg, ts: Date.now() }); notify(m.name, arg + " har skrevet i gjesteboka di.", "profil", m.name); flash = arg + " har svart i gjesteboka di!"; });
+      save(); go({ name: "profil", arg: arg, tab: "gjestebok", counted: true });
+    } else if (t === "diary") {
+      m.diary.push({ id: uid(), title: v("title"), text: f.text.value, ts: Date.now() }); addPoints(2); save(); go({ name: "profil", arg: m.name, tab: "dagbok" });
+    } else if (t === "event") {
+      m.events.push({ id: uid(), date: v("date"), title: v("title") }); save(); go({ name: "profil", arg: m.name, tab: "kalender" });
+    } else if (t === "link") {
+      var url = v("url"); if (!/^https?:\/\//i.test(url)) url = "https://" + url;
+      m.links.push({ id: uid(), title: v("title"), url: url }); save(); go({ name: "profil", arg: m.name, tab: "linker" });
+    } else if (t === "photo") {
+      var file = f.file.files && f.file.files[0]; if (!file) return;
+      var cap = v("caption"), asP = f.asprofile.checked;
+      readPhoto(file, function (src) {
+        if (!src) { flash = "Bildet kunne ikke leses. Prøv et JPG- eller PNG-bilde."; render(); return; }
+        var p = { id: uid(), src: src, caption: cap, ts: Date.now() };
+        m.photos.unshift(p); if (asP) m.photo = src; addPoints(2); save();
+        flash = asP ? "Bildet er lastet opp og er nå profilbildet ditt." : "Bildet er lastet opp.";
+        go({ name: "profil", arg: m.name, tab: "bilder" });
+      });
+    } else if (t === "comment") {
+      var n = byId(db.news, arg); if (!n) return;
+      n.comments.push({ author: m.name, text: v("text"), ts: Date.now() }); addPoints(1);
+      later(function () { n.comments.push({ author: pick(online.length ? online : npcs()), text: pick(POST_REPLIES), ts: Date.now() }); });
+      save(); go({ name: "artikkel", arg: arg, counted: true });
+    } else if (t === "news") {
+      var nn = { id: uid(), cat: v("cat"), title: v("title"), text: f.text.value, author: m.name, ts: Date.now(), group: null, color: pick(["#6a8fc7", "#7a4b8c", "#2e7d6b", "#a6542c", "#3f7a2a"]), reads: 0, comments: [] };
+      db.news.push(nn); addPoints(3); save(); go({ name: "artikkel", arg: nn.id });
+    } else if (t === "group") {
+      var g = { id: uid(), name: v("name"), desc: v("desc"), owner: m.name, members: [m.name], threads: [] };
+      db.groups.push(g); addPoints(2); save(); flash = "Gruppa er opprettet. Inviter vennene dine!"; go({ name: "gruppe", arg: g.id });
+    } else if (t === "thread") {
+      var gg = byId(db.groups, arg); if (!gg) return;
+      var th = { id: uid(), title: v("title"), author: m.name, ts: Date.now(), posts: [{ author: m.name, text: f.text.value, ts: Date.now() }] };
+      gg.threads.push(th); addPoints(2);
+      later(function () { var others = gg.members.filter(function (x) { return x !== m.name && user(x) && user(x).npc; }); if (others.length) th.posts.push({ author: pick(others), text: pick(POST_REPLIES), ts: Date.now() }); });
+      save(); go({ name: "trad", arg: gg.id + "|" + th.id });
+    } else if (t === "reply") {
+      var p2 = arg.split("|"), g2 = byId(db.groups, p2[0]), t2 = g2 && byId(g2.threads, p2[1]); if (!t2) return;
+      t2.posts.push({ author: m.name, text: f.text.value, ts: Date.now() }); addPoints(1); save(); go({ name: "trad", arg: arg });
+    } else if (t === "ad") {
+      db.ads.push({ id: uid(), cat: v("cat"), title: v("title"), text: v("text"), author: m.name, ts: Date.now() }); addPoints(1); save(); flash = "Oppslaget er hengt opp."; go({ name: "oppslag", arg: v("cat") });
+    } else if (t === "msg") {
       var to = v("to"), subj = v("subject");
-      db.msgs.push({ id: uid(), to: to, from: m.name, subject: subj, text: v("text"), ts: Date.now(), read: false });
-      if (user(to) && user(to).npc) npcLater(function () { db.msgs.push({ id: uid(), to: m.name, from: to, subject: "SV: " + subj.replace(/^SV: /, ""), text: pick(MSG_REPLIES), ts: Date.now(), read: false }); flash = "Ny melding fra " + to + "!"; });
-      save(); flash = "Meldingen ble sendt til " + to + "."; go("meldinger");
-    } else if (t === "search") {
-      go("sok", v("q"));
+      db.msgs.push({ id: uid(), to: to, from: m.name, subject: subj, text: f.text.value, ts: Date.now(), read: false });
+      if (user(to) && user(to).npc) later(function () { db.msgs.push({ id: uid(), to: m.name, from: to, subject: "SV: " + subj.replace(/^SV: /, ""), text: pick(MSG_REPLIES), ts: Date.now(), read: false }); notify(m.name, "Ny melding fra " + to + ".", "postkasse"); });
+      else notify(to, "Ny melding fra " + m.name + ".", "postkasse");
+      save(); flash = "Meldingen er sendt til " + to + "."; go({ name: "postkasse", sent: true });
+    } else if (t === "status") {
+      m.status = v("status"); var mood = form.querySelector("input[name=mood]:checked"); if (mood) m.mood = mood.value;
+      save(); flash = "Statusen din er oppdatert."; go({ name: "profil", arg: m.name });
+    } else if (t === "settings") {
+      var nw = v("name"), se = document.getElementById("se-err");
+      if (nw !== m.name) {
+        if (!/^[A-Za-z0-9_æøåÆØÅ.-]{3,20}$/.test(nw)) { se.textContent = "Brukernavnet må være 3–20 tegn: bokstaver, tall, punktum, _ eller -."; return; }
+        if (db.users[nw]) { se.textContent = "Brukernavnet " + nw + " er opptatt. Velg et annet."; return; }
+        renameUser(m.name, nw); m = me();
+      }
+      m.gender = v("gender"); m.age = parseInt(v("age"), 10) || m.age; m.city = v("city"); m.bydel = v("bydel") || STEDER[m.city][0]; m.about = f.about.value; m.pass = f.pass.value;
+      save(); flash = "Innstillingene er lagret."; go({ name: "profil", arg: m.name });
+    } else if (t === "finn") {
+      go({ name: "finn", q: { name: v("name"), gender: v("gender"), min: v("min"), max: v("max"), city: v("city"), online: f.online.checked } });
     }
   }
 
+  // ---------- klikk ----------
   function onClick(e) {
-    var el = e.target.closest("[data-go],[data-act]"); if (!el) return;
+    var el = e.target.closest("[data-go],[data-act]"); if (!el || el.tagName === "SELECT") return;
     var arg = el.getAttribute("data-arg"), m = me();
     if (el.hasAttribute("data-go")) {
-      var name = el.getAttribute("data-go");
-      if (name === "house" && !arg) arg = db.me;
-      view = { name: name, arg: arg, subj: el.getAttribute("data-subj") };
-      render(); window.scrollTo(0, 0); return;
+      var nv = { name: el.getAttribute("data-go"), arg: arg };
+      if (el.hasAttribute("data-tab")) nv.tab = el.getAttribute("data-tab");
+      if (el.hasAttribute("data-cat")) nv.cat = el.getAttribute("data-cat");
+      if (el.hasAttribute("data-mine")) nv.mine = true;
+      if (el.hasAttribute("data-sent")) nv.sent = true;
+      if (el.hasAttribute("data-subj")) nv.subj = el.getAttribute("data-subj");
+      if (nv.name === "nyheter" && !nv.cat) nv.cat = "Alle";
+      if (nv.name === "profil" && !nv.arg) nv.arg = db.me;
+      if (nv.name === "profil" && view.name === "profil" && view.arg === nv.arg) nv.counted = true;
+      if (nv.name === "ansikter") pickOnline();
+      go(nv); return;
     }
     var act = el.getAttribute("data-act");
-    if (act === "logout") { db.me = null; save(); online = pickOnline(); go("forside"); }
-    else if (act === "demo") {
-      if (!db.users["Nostalgiker"]) createUser("Nostalgiker", "demo", 16, "Lillehammer", "sentrum");
-      login("Nostalgiker"); flash = "Du er logget inn som demobruker. Utforsk i vei!"; go("house", "Nostalgiker");
-    }
-    else if (act === "addfriend" && m) {
+    if (act === "logout") { db.me = null; save(); go({ name: "loggut" }); }
+    else if (act === "forgot") { flash = "Passordet ditt er det du skrev da du flyttet inn. Har du glemt det, kan du flytte inn på nytt med et nytt brukernavn."; go({ name: "nyheter", cat: "Alle" }); }
+    else if (!m) return;
+    else if (act === "addfriend") {
       var u = user(arg); if (!u || u.requests.indexOf(m.name) !== -1) return;
-      u.requests.push(m.name); addPoints(2); save(); flash = "Venneforespørsel sendt til " + arg + ".";
-      if (u.npc) npcLater(function () {
-        u.requests = u.requests.filter(function (r) { return r !== m.name; });
-        if (u.friends.indexOf(m.name) === -1) { u.friends.push(m.name); m.friends.push(u.name); }
-        flash = arg + " har godtatt venneforespørselen din!";
-      });
-      render();
+      u.requests.push(m.name); save(); flash = "Venneforespørsel sendt til " + arg + ".";
+      if (u.npc) later(function () { u.requests = u.requests.filter(function (r) { return r !== m.name; }); if (u.friends.indexOf(m.name) === -1) { u.friends.push(m.name); m.friends.push(u.name); } notify(m.name, arg + " har godtatt venneforespørselen din.", "profil", arg); flash = arg + " er nå vennen din!"; });
+      else notify(arg, m.name + " vil bli venn med deg.", "profil", arg);
+      view.counted = true; render();
     }
-    else if ((act === "accept" || act === "decline") && m) {
+    else if (act === "accept" || act === "decline") {
       m.requests = m.requests.filter(function (r) { return r !== arg; });
-      if (act === "accept" && m.friends.indexOf(arg) === -1) { m.friends.push(arg); user(arg).friends.push(m.name); addPoints(2); flash = "Du og " + arg + " er nå venner!"; }
+      if (act === "accept" && m.friends.indexOf(arg) === -1) { m.friends.push(arg); user(arg).friends.push(m.name); flash = "Du og " + arg + " er nå venner!"; }
       save(); render();
     }
-    else if (act === "delgb" && m) { db.gb = db.gb.filter(function (g) { return g.id !== arg; }); save(); render(); }
-    else if (act === "color" && m) {
-      m.color = arg; save();
+    else if (act === "delgb") { db.gb = db.gb.filter(function (g) { return g.id !== arg; }); save(); render(); }
+    else if (act === "deldiary") { m.diary = m.diary.filter(function (d) { return d.id !== arg; }); save(); render(); }
+    else if (act === "delevent") { m.events = m.events.filter(function (d) { return d.id !== arg; }); save(); render(); }
+    else if (act === "dellink") { m.links = m.links.filter(function (d) { return d.id !== arg; }); save(); render(); }
+    else if (act === "delad") { db.ads = db.ads.filter(function (d) { return d.id !== arg; }); save(); render(); }
+    else if (act === "delphoto") { var dp = byId(m.photos, arg); m.photos = m.photos.filter(function (d) { return d.id !== arg; }); if (dp && m.photo === dp.src) m.photo = null; save(); render(); }
+    else if (act === "setprofile") { var sp = byId(m.photos, arg); if (sp) { m.photo = sp.src; save(); flash = "Profilbildet er byttet."; render(); } }
+    else if (act === "join" || act === "leave") {
+      var g = byId(db.groups, arg); if (!g) return;
+      if (act === "join" && g.members.indexOf(m.name) === -1) { g.members.push(m.name); flash = "Du er nå medlem av " + g.name + "."; }
+      if (act === "leave") { g.members = g.members.filter(function (x) { return x !== m.name; }); flash = "Du har meldt deg ut av " + g.name + "."; }
+      save(); render();
+    }
+    else if (act === "meet") {
+      var mu = arg;
+      if (Math.random() < 0.5) { notify(m.name, "Både du og " + mu + " vil møtes! Send en melding.", "skriv", mu); flash = "Det ble match! " + mu + " vil også møte deg. Sjekk varslene dine."; }
+      else flash = "Du sa ja til " + mu + ". Vi sier fra hvis det blir match.";
+      save(); go({ name: "mot" });
+    }
+    else if (act === "nomeet") { go({ name: "mot" }); }
+    else if (act === "max") { m.max = !m.max; save(); flash = m.max ? "Gratulerer, du er nå Max-borger!" : "Max er avsluttet."; render(); }
+    else if (act === "pcolor") {
+      var c = arg.split(","); m.bg = c[0]; m.fg = c[1]; save();
       el.parentNode.querySelectorAll("button").forEach(function (b) { var on = b === el; b.classList.toggle("on", on); b.setAttribute("aria-checked", String(on)); });
+    }
+    else if (act === "reset") {
+      if (el.getAttribute("data-sure")) { try { localStorage.removeItem(KEY); } catch (er) {} mem = null; db = seed(); online = []; pickOnline(); db.started = false; save(); location.reload(); return; }
+      el.setAttribute("data-sure", "1"); el.textContent = "Klikk igjen for å slette alt og starte på nytt";
     }
   }
 
   document.addEventListener("submit", onSubmit);
   document.addEventListener("click", onClick);
+  document.addEventListener("change", function (e) {
+    if (e.target.id === "se-city") {
+      var b = document.getElementById("se-bydel");
+      b.innerHTML = (STEDER[e.target.value] || []).map(function (x) { return "<option>" + esc(x) + "</option>"; }).join("");
+    }
+  });
 
-  // folk logger inn og ut av seg selv
+  // ---------- klokke og liv i byen ----------
+  function tick() {
+    var d = new Date(), s = pad(d.getHours()) + " " + pad(d.getMinutes()) + " " + pad(d.getSeconds());
+    var c = document.getElementById("clock"); if (c) c.textContent = s;
+    var g = document.getElementById("gclock"); if (g) g.textContent = s;
+  }
+  setInterval(tick, 1000);
   setInterval(function () {
-    var npcs = Object.keys(db.users).filter(function (n) { return db.users[n].npc; });
-    var n = pick(npcs), i = online.indexOf(n);
-    if (i === -1) online.push(n); else if (online.length > 3) online.splice(i, 1);
-    var box = document.getElementById("online"); if (box) box.innerHTML = onlineHtml();
-  }, 15000);
+    var all = npcs(), n = pick(all), i = online.indexOf(n);
+    if (i === -1) online.push(n); else if (online.length > 4) online.splice(i, 1);
+    onlineFake += Math.floor(Math.random() * 41) - 20;
+    var m = me();
+    if (m && Math.random() < 0.25) { var vis = pick(online.length ? online : all); m.log.unshift({ who: vis, ts: Date.now() }); notify(m.name, vis + " besøkte profilen din.", "profil", vis); save(); }
+    if (!typing()) { renderSide(); renderHead(); }
+  }, 20000);
 
   render();
 })();
